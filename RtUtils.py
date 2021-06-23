@@ -9,23 +9,25 @@ _HOME = os.getenv("HOME")
 
 
 def check_dir_for_file_to_list(input_list, directory, file_check):
-    for item in os.listdir(directory):
-        if item not in input_list and os.path.isdir(directory + "/" + item) \
-                and os.path.exists(directory + item + file_check):
-            input_list.append(item)
+    if os.path.isdir(directory):
+        for item in os.listdir(directory):
+            if item not in input_list and os.path.isdir(directory + "/" + item) \
+                    and os.path.exists(directory + item + file_check):
+                input_list.append(item)
     return input_list
 
 
 def check_dir_for_icon_theme(input_list, directory, file_check):
-    for item in os.listdir(directory):
-        if item not in input_list and os.path.isdir(directory + "/" + item) \
-                and os.path.exists(directory + item + file_check):
-            icon_theme_dirs = []
-            for item1 in os.listdir(directory + item):
-                if os.path.isdir(directory + item + "/" + item1):
-                    icon_theme_dirs = [item1]
-            if icon_theme_dirs != [] and icon_theme_dirs != ["cursors"]:
-                input_list.append(item)
+    if os.path.isdir(directory):
+        for item in os.listdir(directory):
+            if item not in input_list and os.path.isdir(directory + "/" + item) \
+                    and os.path.exists(directory + item + file_check):
+                icon_theme_dirs = []
+                for item1 in os.listdir(directory + item):
+                    if os.path.isdir(directory + item + "/" + item1):
+                        icon_theme_dirs = [item1]
+                if icon_theme_dirs != [] and icon_theme_dirs != ["cursors"]:
+                    input_list.append(item)
     return input_list
 
 
