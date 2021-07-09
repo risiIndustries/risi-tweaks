@@ -38,3 +38,57 @@
         - "click"
         - "sloppy"
         - "mouse"
+- section:
+    name: "Window Titlebar"
+    settings:
+    - setting:
+      name: "Double Click Action"
+      type: DropdownGSetting
+      gsetting_schema: "org.gnome.desktop.wm.preferences"
+      gsetting_key: "action-double-click-titlebar"
+      dropdown_options:
+        - "Lower"
+        - "Menu"
+        - "Minimize"
+        - "None"
+        - "Toggle Maximize"
+      dropdown_keys:
+        - "lower"
+        - "menu"
+        - "minimize"
+        - "none"
+        - "toggle-maximize"
+    - setting:
+      name: "Middle Click Action"
+      type: DropdownGSetting
+      gsetting_schema: "org.gnome.desktop.wm.preferences"
+      gsetting_key: "action-middle-click-titlebar"
+      dropdown_options:
+        - "Lower"
+        - "Menu"
+        - "Minimize"
+        - "None"
+        - "Toggle Maximize"
+      dropdown_keys:
+        - "lower"
+        - "menu"
+        - "minimize"
+        - "none"
+        - "toggle-maximize"
+    - setting:
+      name: "Right Click Action"
+      type: DropdownGSetting
+      gsetting_schema: "org.gnome.desktop.wm.preferences"
+      gsetting_key: "action-right-click-titlebar"
+      dropdown_options:
+        - "Lower"
+        - "Menu"
+        - "Minimize"
+        - "None"
+        - "Toggle Maximize"
+      dropdown_keys:
+        - "lower"
+        - "menu"
+        - "minimize"
+        - "none"
+        - "toggle-maximize"

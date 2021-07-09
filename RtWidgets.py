@@ -185,44 +185,42 @@ class DropdownGSetting(Dropdown):
         self.menu = menu
         self.case = case
 
-        self.dropdownindex = {}
-        self.dropdownindexid = 0
-
         for entry in self.menu:
             self.dropdown.append_text(entry)
-            self.dropdownindex[entry] = self.dropdownindexid
-            self.dropdownindexid = self.dropdownindexid + 1
         if type(self.case) == list:
             for count, item in enumerate(self.case):
                 if item == self.case[count]:
                     if not self.setting.get_string(key) in self.case:
                         self.dropdown.append_text(self.setting.get_string(key))
-                        self.dropdownindex[self.setting.get_string(key)] = self.dropdownindexid
-                        self.dropdownindexid = self.dropdownindexid + 1
                         self.menu.append(self.setting.get_string(key))
                         self.case.append(self.setting.get_string(key))
 
                     self.dropdown.set_active(
-                        self.dropdownindex[self.menu[count]]
+                        self.case.index(self.setting.get_string(key))
                     )
         elif self.case == "lower":
-            if not self.setting.get_string(key).capitalize() in self.dropdownindex:
+            self.case = []
+            for item in self.menu:
+                self.case.append(item.lower())
+
+            if self.setting.get_string(key).lower() not in self.case:
                 self.dropdown.append_text(self.setting.get_string(key).capitalize())
-                self.dropdownindex[self.setting.get_string(key).capitalize()] = self.dropdownindexid
-                self.dropdownindexid = self.dropdownindexid + 1
+                self.menu.append(self.setting.get_string(key).capitalize())
+                self.case.append(self.setting.get_string(key).capitalize())
 
             self.dropdown.set_active(
-                self.dropdownindex[self.setting.get_string(key).capitalize()]
+                self.case.index(self.setting.get_string(key))
             )
 
         elif self.case == "same":
-            if not self.setting.get_string(key) in self.dropdownindex:
+            self.case = self.menu
+            if self.setting.get_string(key) not in self.case:
                 self.dropdown.append_text(self.setting.get_string(key))
-                self.dropdownindex[self.setting.get_string(key)] = self.dropdownindexid
-                self.dropdownindexid = self.dropdownindexid + 1
+                self.menu.append(self.setting.get_string(key))
+                self.case.append(self.setting.get_string(key))
 
             self.dropdown.set_active(
-                self.dropdownindex[self.setting.get_string(key)]
+                self.case.index(self.setting.get_string(key))
             )
 
         self.dropdown.connect("changed", self.dropdown_changed, key, self.case)
@@ -253,16 +251,17 @@ class DropdownGSetting(Dropdown):
                     if type(self.case) == list:
                         self.dropdown.set_active(self.case.index(new_value))
                     elif self.case == "lower":
-                        self.dropdown.set_active(self.dropdownindex[new_value.capitalize()])
+                        self.dropdown.set_active(self.case[new_value].capitalize())
                     else:
-                        self.dropdown.set_active(self.dropdownindex[new_value])
+                        self.dropdown.set_active(self.case[new_value])
                 except KeyError:
+                    print("KeyError")
                     if type(self.case) == list and self.new_value not in self.case:
                         self.case.append(new_value)
                     self.dropdown.append_text(new_value)
-                    self.dropdownindex[new_value] = self.dropdownindexid
+                    self.menu.append(self.setting.get_string(key))
+                    self.case.append(self.setting.get_string(key))
                     self.dropdown.set_active(self.dropdownindex[new_value])
-                    self.dropdownindexid = self.dropdownindexid + 1
                     self.dropdown.append_text(self.setting.get_string(key))
 
 

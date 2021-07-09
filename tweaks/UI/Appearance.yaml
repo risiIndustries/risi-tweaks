@@ -22,7 +22,7 @@
       gsetting_schema: "org.gnome.desktop.interface"
       gsetting_key: cursor-theme
       dropdown_options: cursor-themes
-      dropdown_keys: "same"
+      dropdown_keys: same
 - section:
     name: "Fonts"
     settings:
@@ -63,7 +63,7 @@
       name: "Hinting"
       type: DropdownGSetting
       gsetting_schema: "org.gnome.desktop.interface"
-      gsetting_key: "font-antialiasing"
+      gsetting_key: "font-hinting"
       dropdown_options:
         - "Full"
         - "Medium"
