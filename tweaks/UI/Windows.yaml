@@ -1,0 +1,40 @@
+# UI -> Windows
+- section:
+    name: "Windows"
+    settings:
+    - setting:
+      name: "Attach Modal Dialogs"
+      type: ToggleGSetting
+      gsetting_schema: "org.gnome.mutter"
+      gsetting_key: "attach-modal-dialogs"
+    - setting:
+      name: "Center New Windows"
+      type: ToggleGSetting
+      gsetting_schema: "org.gnome.mutter"
+      gsetting_key: "center-new-windows"
+    - setting:
+      name: "Window Action Key"
+      type: DropdownGSetting
+      gsetting_schema: "org.gnome.desktop.wm.preferences"
+      gsetting_key: "mouse-button-modifier"
+      dropdown_options:
+        - "Alt"
+        - "Super (Default)"
+        - "None"
+      dropdown_keys:
+        - "<Alt>"
+        - "<Super>"
+        - "disabled"
+    - setting:
+      name: "Window Focus"
+      type: DropdownGSetting
+      gsetting_schema: "org.gnome.desktop.wm.preferences"
+      gsetting_key: "focus-mode"
+      dropdown_options:
+        - "Click to Focus"
+        - "Focus on Hover"
+        - "Right Click"
+      dropdown_keys:
+        - "click"
+        - "sloppy"
+        - "mouse"

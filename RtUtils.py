@@ -99,3 +99,9 @@ def get_cursor_themes():
     )
 
     return cursor_themes
+
+functions = {
+    "gtk-themes": get_gtk_themes(),
+    "icon-themes": get_icon_themes(),
+    "cursor-themes": get_cursor_themes()
+}

@@ -1,0 +1,80 @@
+# UI -> Appearance
+- section:
+    name: "Theming"
+    settings:
+    - setting:
+      name: "Application Theme (GTK Only)"
+      type: DropdownGSetting
+      gsetting_schema: "org.gnome.desktop.interface"
+      gsetting_key: gtk-theme
+      dropdown_options: gtk-themes
+      dropdown_keys: same
+    - setting:
+      name: "Icon Theme"
+      type: DropdownGSetting
+      gsetting_schema: "org.gnome.desktop.interface"
+      gsetting_key: icon-theme
+      dropdown_options: icon-themes
+      dropdown_keys: same
+    - setting:
+      name: "Cursor Theme"
+      type: DropdownGSetting
+      gsetting_schema: "org.gnome.desktop.interface"
+      gsetting_key: cursor-theme
+      dropdown_options: cursor-themes
+      dropdown_keys: "same"
+- section:
+    name: "Fonts"
+    settings:
+    - setting:
+      name: "Legacy Window Title Font"
+      type: FontGSetting
+      gsetting_schema: "org.gnome.desktop.wm.preferences"
+      gsetting_key: "titlebar-font"
+    - setting:
+      name: "Interface Font"
+      type: FontGSetting
+      gsetting_schema: "org.gnome.desktop.interface"
+      gsetting_key: "font-name"
+    - setting:
+      name: "Document Font"
+      type: FontGSetting
+      gsetting_schema: "org.gnome.desktop.interface"
+      gsetting_key: "document-font-name"
+    - setting:
+      name: "Font Hinting"
+      type: FontGSetting
+      gsetting_schema: "org.gnome.desktop.interface"
+      gsetting_key: "monospace-font-name"
+    - setting:
+      name: "Antialiasing"
+      type: DropdownGSetting
+      gsetting_schema: "org.gnome.desktop.interface"
+      gsetting_key: "font-antialiasing"
+      dropdown_options:
+        - "Subpixel (for LCDs)"
+        - "Standard (grayscale)"
+        - "None"
+      dropdown_keys:
+        - "rgba"
+        - "grayscale"
+        - "none"
+    - setting:
+      name: "Hinting"
+      type: DropdownGSetting
+      gsetting_schema: "org.gnome.desktop.interface"
+      gsetting_key: "font-antialiasing"
+      dropdown_options:
+        - "Full"
+        - "Medium"
+        - "Slight"
+        - "None"
+      dropdown_keys: "lower"
+    - setting:
+      name: "Scaling Factor"
+      type: SpinButtonGSetting
+      gsetting_schema: "org.gnome.desktop.interface"
+      gsetting_key: "text-scaling-factor"
+      spinbutton_min: 0.50
+      spinbutton_max: 3.00
+      spinbutton_step: 0.05

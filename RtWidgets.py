@@ -5,6 +5,8 @@
 import os
 import gi
 
+import RtUtils
+
 gi.require_version("Gtk", "3.0")
 from gi.repository import Gtk, Gio
 
@@ -14,58 +16,66 @@ _EXTENSIONS = "{0}/.local/share/gnome-shell/extensions/".format(_HOME)
 # For code optimization by avoiding duplicate classes
 known_schemas = {"org.gnome.shell": Gio.Settings.new("org.gnome.shell")}
 
+# Frame Container (Thanks PizzaMartijn)
+class Frame(Gtk.Frame):
+    def __init__(self, text):
+        Gtk.Frame.__init__(self)
+        self.framebox = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
+        self.get_style_context().add_class('view')
+        self.set_margin_bottom(16)
+        self.box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
+
+        if text is not None or text != "":
+            self.label = Gtk.Label(label=text, xalign=0.0)
+            self.label.get_style_context().add_class('heading')
+            self.label.set_margin_bottom(8)
+
+        Gtk.Frame.add(self, self.box)
+
+    def add(self, *args):
+        self.box.add(*args)
+
 
 # Generic Option
-class Option(Gtk.ListBoxRow):
+class Option(Gtk.Box):
     def __init__(self, text):
-        Gtk.ListBoxRow.__init__(self)
-        self.box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
+        Gtk.Box.__init__(self)
         self.label = Gtk.Label(label=text)
         self.label.set_xalign(0)
         self.label.set_margin_start(15)
         self.label.set_margin_end(30)
         self.label.set_hexpand(True)
-        self.box.add(self.label)
-        self.add(self.box)
-
-
-# Space Option
-class Space(Gtk.ListBoxRow):
-    def __init__(self, spaceint):
-        Option.__init__(self, "")
-        self.label.set_margin_top(spaceint / 2)
-        self.label.set_margin_end(spaceint / 2)
-
+        self.add(self.label)
 
 # Label and Description Options
 class Label(Option):
     def __init__(self, text):
         Option.__init__(self, text)
         self.label.set_markup("<b>" + text + "</b>")
+        self.label.get_style_context().add_class('heading')
         self.label.set_margin_top(15)
         self.label.set_margin_bottom(10)
-
 
 class Description(Option):
     def __init__(self, text):
         Option.__init__(self, text)
         self.label.set_markup("<small>" + text + "</small>")
+        self.label.get_style_context().add_class('dim-label')
         self.label.set_margin_top(5)
         self.label.set_margin_bottom(2.5)
-
 
 # Toggle Options
 class Toggle(Option):
     def __init__(self, text):
         Option.__init__(self, text)
         self.switch = Gtk.Switch()
-        self.switch.set_margin_bottom(2.5)
-        self.switch.set_margin_top(2.5)
+        self.switch.set_margin_bottom(5)
+        self.switch.set_margin_top(5)
         self.switch.set_margin_end(15)
-        self.box.add(self.switch)
+        self.add(self.switch)
 
 
-class ToggleSetting(Toggle):
+class ToggleGSetting(Toggle):
     def __init__(self, text, schema, key):
         Toggle.__init__(self, text)
         if schema not in known_schemas:
@@ -159,16 +169,19 @@ class Dropdown(Option):
         self.dropdown.set_margin_bottom(2.5)
         self.dropdown.set_margin_top(2.5)
         self.dropdown.set_margin_end(15)
-        self.box.add(self.dropdown)
+        self.add(self.dropdown)
 
 
-class DropdownSetting(Dropdown):
+class DropdownGSetting(Dropdown):
     def __init__(self, text, schema, key, menu, case):
         Dropdown.__init__(self, text)
         if schema not in known_schemas:
             known_schemas[schema] = Gio.Settings.new(schema)
 
         self.setting = known_schemas[schema]
+        if isinstance(menu, str):
+            menu = RtUtils.functions[menu]
+
         self.menu = menu
         self.case = case
 
@@ -261,10 +274,10 @@ class Font(Option):
         self.font_button.set_margin_bottom(2.5)
         self.font_button.set_margin_top(2.5)
         self.font_button.set_margin_end(15)
-        self.box.add(self.font_button)
+        self.add(self.font_button)
 
 
-class FontSetting(Font):
+class FontGSetting(Font):
     def __init__(self, text, schema, key):
         Font.__init__(self, text)
 
@@ -298,10 +311,10 @@ class SpinButton(Option):
         self.spin_button.set_margin_bottom(2.5)
         self.spin_button.set_margin_top(2.5)
         self.spin_button.set_margin_end(15)
-        self.box.add(self.spin_button)
+        self.add(self.spin_button)
 
 
-class SpinButtonSetting(SpinButton):
+class SpinButtonGSetting(SpinButton):
     def __init__(
             self, text, schema, key,
             minint, maxint, step, percent
@@ -341,3 +354,39 @@ class SpinButtonSetting(SpinButton):
                     self.spin_button.set_value(
                         self.setting.get_double(key0) * 100
                     )
+
+
+def setting_to_widget(widget):
+    if widget["type"] == "ToggleGSetting":
+        return ToggleGSetting(
+            widget["name"],
+            widget["gsetting_schema"],
+            widget["gsetting_key"]
+        )
+
+    elif widget["type"] == "DropdownGSetting":
+        return DropdownGSetting(
+            widget["name"],
+            widget["gsetting_schema"],
+            widget["gsetting_key"],
+            widget["dropdown_options"],
+            widget["dropdown_keys"]
+        )
+    elif widget["type"] == "FontGSetting":
+        return FontGSetting(
+            widget["name"],
+            widget["gsetting_schema"],
+            widget["gsetting_key"]
+        )
+    elif widget["type"] == "SpinButtonGSetting":
+        return SpinButtonGSetting(
+            widget["name"],
+            widget["gsetting_schema"],
+            widget["gsetting_key"],
+            widget["spinbutton_min"],
+            widget["spinbutton_max"],
+            widget["spinbutton_step"],
+            True
+        )
+    else:
+        raise ValueError("You suck at coding")
