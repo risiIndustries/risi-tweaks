@@ -5,18 +5,15 @@
     - setting:
       name: "Attach Modal Dialogs"
       type: ToggleGSetting
-      gsetting_schema: "org.gnome.mutter"
-      gsetting_key: "attach-modal-dialogs"
+      gsetting: [org.gnome.mutter, attach-modal-dialogs]
     - setting:
       name: "Center New Windows"
       type: ToggleGSetting
-      gsetting_schema: "org.gnome.mutter"
-      gsetting_key: "center-new-windows"
+      gsetting: [org.gnome.mutter, center-new-windows]
     - setting:
       name: "Window Action Key"
       type: DropdownGSetting
-      gsetting_schema: "org.gnome.desktop.wm.preferences"
-      gsetting_key: "mouse-button-modifier"
+      gsetting: [org.gnome.desktop.wm.preferences, mouse-button-modifier]
       dropdown_options:
         - "Alt"
         - "Super (Default)"
@@ -28,8 +25,7 @@
     - setting:
       name: "Window Focus"
       type: DropdownGSetting
-      gsetting_schema: "org.gnome.desktop.wm.preferences"
-      gsetting_key: "focus-mode"
+      gsetting: [org.gnome.desktop.wm.preferences, "focus-mode"]
       dropdown_options:
         - "Click to Focus (Recommended)"
         - "Focus on Hover"
@@ -48,8 +44,7 @@
     - setting:
       name: "Double Click Action"
       type: DropdownGSetting
-      gsetting_schema: "org.gnome.desktop.wm.preferences"
-      gsetting_key: "action-double-click-titlebar"
+      gsetting: [org.gnome.desktop.wm.preferences, action-double-click-titlebar]
       dropdown_options:
         - "Lower"
         - "Menu"
@@ -65,8 +60,7 @@
     - setting:
       name: "Middle Click Action"
       type: DropdownGSetting
-      gsetting_schema: "org.gnome.desktop.wm.preferences"
-      gsetting_key: "action-middle-click-titlebar"
+      gsetting: [org.gnome.desktop.wm.preferences, action-middle-click-titlebar]
       dropdown_options:
         - "Lower"
         - "Menu"
@@ -82,8 +76,7 @@
     - setting:
       name: "Right Click Action"
       type: DropdownGSetting
-      gsetting_schema: "org.gnome.desktop.wm.preferences"
-      gsetting_key: "action-right-click-titlebar"
+      gsetting: [org.gnome.desktop.wm.preferences, action-right-click-titlebar]
       dropdown_options:
         - "Lower"
         - "Menu"
@@ -99,8 +92,7 @@
     - setting:
       name: "Button Layout"
       type: DropdownGSetting
-      gsetting_schema: "org.gnome.desktop.wm.preferences"
-      gsetting_key: "button-layout"
+      gsetting: [org.gnome.desktop.wm.preferences, button-layout]
       dropdown_options:
         - "risiOS Left"
         - "risiOS Right (default)"

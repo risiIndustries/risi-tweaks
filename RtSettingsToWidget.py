@@ -31,28 +31,28 @@ def get_base_widget(widget):
         if widget["type"] == "ToggleGSetting":
             return RtBaseWidgets.ToggleGSetting(
                 widget["name"],
-                widget["gsetting_schema"],
-                widget["gsetting_key"]
+                widget["gsetting"][0],
+                widget["gsetting"][1]
             )
         elif widget["type"] == "DropdownGSetting":
             return RtBaseWidgets.DropdownGSetting(
                 widget["name"],
-                widget["gsetting_schema"],
-                widget["gsetting_key"],
+                widget["gsetting"][0],
+                widget["gsetting"][1],
                 widget["dropdown_options"],
                 widget["dropdown_keys"]
             )
         elif widget["type"] == "FontGSetting":
             return RtBaseWidgets.FontGSetting(
                 widget["name"],
-                widget["gsetting_schema"],
-                widget["gsetting_key"]
+                widget["gsetting"][0],
+                widget["gsetting"][1]
             )
         elif widget["type"] == "SpinButtonGSetting":
             return RtBaseWidgets.SpinButtonGSetting(
                 widget["name"],
-                widget["gsetting_schema"],
-                widget["gsetting_key"],
+                widget["gsetting"][0],
+                widget["gsetting"][1],
                 widget["spinbutton_value_type"],
                 widget["spinbutton_min"],
                 widget["spinbutton_max"],
@@ -87,7 +87,6 @@ def get_custom_widget(setting):
 
 def check_for_dependent_extensions():
     extensions = RtUtils.get_extensions()
-    print(extensions)
     for widget in requires_extension:
         widget.set_visible(widget.requires_extension in extensions)
 
