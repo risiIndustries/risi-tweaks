@@ -25,7 +25,7 @@ class Frame(Gtk.Frame):
         self.set_margin_bottom(16)
         self.box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
 
-        if text is not None or text != "":
+        if text is not None and text != "" and text.lower() != "none":
             self.label = Gtk.Label(label=text, xalign=0.0)
             self.label.get_style_context().add_class('heading')
             self.label.set_margin_bottom(8)
@@ -34,6 +34,7 @@ class Frame(Gtk.Frame):
 
     def add(self, *args):
         self.box.add(*args)
+
 
 
 # Generic Option
@@ -98,68 +99,33 @@ class ToggleGSetting(Toggle):
                 self.switch.set_state(new_value)
 
 
-class ExtensionToggleSetting(Toggle):
-    def __init__(self, text, key, extension, directory):
-        Toggle.__init__(self, text)
-        self.extension = "org.gnome.shell.extensions." + extension
-        self.setting_lookup = Gio.SettingsSchemaSource.get_default()
-        if self.setting_lookup.lookup(self.extension, True) is None:
-            self.setting_lookup = Gio.SettingsSchemaSource.new_from_directory(
-                _EXTENSIONS + directory + "/schemas/",
-                None, False
-            )
-            self.setting = Gio.Settings.new_full(
-                self.settinglookup.lookup(
-                    self.extension,
-                    True
-                ),
-                None, None)
-
-        self.switch.set_state(self.setting.get_boolean(key))
-
-        self.switch.connect("state-set", self.state_set, key)
-        self.setting.connect("changed", self.setting_changed, key)
-
-    def state_set(self, switch, state, key):
-        self.setting.set_boolean(key, state)
-
-    def setting_changed(self, setting, changed_key, key):
-        if changed_key == key:
-            new_value = self.setting.get_boolean(key)
-            old_value = self.switch.get_state()
-            if self.new_value != self.old_value:
-                self.switch.set_state(self.new_value)
-
-
 class ExtensionToggle(Toggle):
     def __init__(self, label, extension):
-        Toggle.__init__(self)
-        self.settings = known_schemas["org.gnome.shell"]
-        self.extensionlist = self.settings.get_strv("enabled-extensions")
+        Toggle.__init__(self, label)
+        self.setting = known_schemas["org.gnome.shell"]
+        self.extension = extension
+        self.extensionlist = self.setting.get_strv("enabled-extensions")
 
-        if extension in self.list:
-            self.switch.set_state(True)
-        else:
-            self.switch.set_state(False)
+        self.switch.set_state(extension in self.extensionlist)
 
-        self.switch.connect("state-set", self.state_set, extension)
-        self.setting.connect("changed", self.setting_changed, extension)
+        self.switch.connect("state-set", self.state_set)
+        self.setting.connect("changed", self.setting_changed)
 
-        def state_set(self, switch, state, extension):
-            if state is True and extension not in self.list:
-                self.list.append(extension)
-            elif state is False and extension in self.list:
-                self.list.remove(extension)
-            self.setting.set_strv("enabled-extensions", self.list)
+    def state_set(self, switch, state):
+        self.extensionlist = self.setting.get_strv("enabled-extensions")
+        if state is True and self.extension not in self.extensionlist:
+            self.extensionlist.append(self.extension)
+        elif state is False and self.extension in self.extensionlist:
+            self.extensionlist.remove(self.extension)
+        self.setting.set_strv("enabled-extensions", self.extensionlist)
 
-        def setting_changed(self, setting, key, extension):
-            if key == "enabled-extensions":
-                self.list = self.setting.get_strv("enabled-extensions")
-                if extension in self.list:
-                    self.switch.set_state(True)
-                else:
-                    self.switch.set_state(False)
-
+    def setting_changed(self, setting, key):
+        if key == "enabled-extensions":
+            self.extensionlist = self.setting.get_strv("enabled-extensions")
+            if self.extension in self.extensionlist:
+                self.switch.set_state(True)
+            else:
+                self.switch.set_state(False)
 
 # Dropdown Options
 class Dropdown(Option):
@@ -209,7 +175,7 @@ class DropdownGSetting(Dropdown):
                 self.case.append(self.setting.get_string(key).capitalize())
 
             self.dropdown.set_active(
-                self.case.index(self.setting.get_string(key))
+                self.case.index(self.setting.get_string(key).lower())
             )
 
         elif self.case == "same":
@@ -315,7 +281,7 @@ class SpinButton(Option):
 
 class SpinButtonGSetting(SpinButton):
     def __init__(
-            self, text, schema, key,
+            self, text, schema, key, value_type,
             minint, maxint, step, percent
     ):
         if percent:
@@ -327,22 +293,35 @@ class SpinButtonGSetting(SpinButton):
             known_schemas[schema] = Gio.Settings.new(schema)
 
         self.setting = known_schemas[schema]
-
         self.percent = percent
-        if self.percent is False:
-            self.spin_button.set_value(self.setting.get_double(key))
+        self.value_type = value_type
 
-        elif self.percent is True:
-            self.spin_button.set_value(self.setting.get_double(key) * 100)
+        if self.value_type == "int":
+            self.value = self.setting.get_int(key)
+        elif self.value_type == "uint":
+            self.value = self.setting.get_uint(key)
+        elif self.value_type == "double":
+            self.value = self.setting.get_double(key)
+
+        if self.percent is True:
+            self.value *= 100
+        self.spin_button.set_value(self.value)
+
 
         self.spin_button.connect("value-changed", self.value_changed, key)
         self.setting.connect("changed", self.changed, key)
 
     def value_changed(self, spinbutton, key):
-        if self.percent is False:
-            self.setting.set_double(key, self.spin_button.get_value())
-        elif self.percent is True:
-            self.setting.set_double(key, self.spin_button.get_value() / 100)
+        self.value = self.spin_button.get_value()
+        if self.percent is True:
+            self.value *= 100
+
+        if self.value_type == "int":
+            self.setting.set_int(key, self.value)
+        elif self.value_type == "uint":
+            self.setting.set_uint(key, self.value)
+        elif self.value_type == "double":
+            self.setting.set_double(key, self.value)
 
     def changed(self, setting, key0, key1):
         if key0 == key1:
@@ -355,37 +334,57 @@ class SpinButtonGSetting(SpinButton):
                     )
 
 
-def setting_to_widget(widget):
-    if widget["type"] == "ToggleGSetting":
-        return ToggleGSetting(
-            widget["name"],
-            widget["gsetting_schema"],
-            widget["gsetting_key"]
-        )
+requires_extension = []
+def check_for_dependent_extensions():
+    extensions = RtUtils.get_extensions()
+    for widget in requires_extension:
+        widget.set_visible(widget.required_extension in extensions)
 
-    elif widget["type"] == "DropdownGSetting":
-        return DropdownGSetting(
-            widget["name"],
-            widget["gsetting_schema"],
-            widget["gsetting_key"],
-            widget["dropdown_options"],
-            widget["dropdown_keys"]
-        )
-    elif widget["type"] == "FontGSetting":
-        return FontGSetting(
-            widget["name"],
-            widget["gsetting_schema"],
-            widget["gsetting_key"]
-        )
-    elif widget["type"] == "SpinButtonGSetting":
-        return SpinButtonGSetting(
-            widget["name"],
-            widget["gsetting_schema"],
-            widget["gsetting_key"],
-            widget["spinbutton_min"],
-            widget["spinbutton_max"],
-            widget["spinbutton_step"],
-            True
-        )
-    else:
-        raise ValueError("You suck at coding")
+
+def setting_to_widget(widget):
+    try:
+        if widget["type"] == "ToggleGSetting":
+            return ToggleGSetting(
+                widget["name"],
+                widget["gsetting_schema"],
+                widget["gsetting_key"]
+            )
+        elif widget["type"] == "DropdownGSetting":
+            return DropdownGSetting(
+                widget["name"],
+                widget["gsetting_schema"],
+                widget["gsetting_key"],
+                widget["dropdown_options"],
+                widget["dropdown_keys"]
+            )
+        elif widget["type"] == "FontGSetting":
+            return FontGSetting(
+                widget["name"],
+                widget["gsetting_schema"],
+                widget["gsetting_key"]
+            )
+        elif widget["type"] == "SpinButtonGSetting":
+            return SpinButtonGSetting(
+                widget["name"],
+                widget["gsetting_schema"],
+                widget["gsetting_key"],
+                widget["spinbutton_value_type"],
+                widget["spinbutton_min"],
+                widget["spinbutton_max"],
+                widget["spinbutton_step"],
+                widget["stepbutton_percentage"]
+            )
+        elif widget["type"] == "ExtensionToggle":
+            extension_required_widget = ExtensionToggle(
+                widget["name"],
+                widget["extension"]
+            )
+            extension_required_widget.required_extension = widget["extension"]
+            requires_extension.append(extension_required_widget)
+            return extension_required_widget
+        else:
+            print(widget)
+            return Label("Error")
+    except KeyError as e:
+        print(widget)
+        return Label("Error")

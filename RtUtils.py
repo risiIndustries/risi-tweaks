@@ -100,6 +100,22 @@ def get_cursor_themes():
 
     return cursor_themes
 
+def get_extensions():
+    extensions = []
+
+    extensions = check_dir_for_file_to_list(
+        extensions,
+        _HOME + "/.local/share/gnome-shell/extensions/",
+        "/extension.js"
+    )
+    extensions = check_dir_for_file_to_list(
+        extensions,
+        "/usr/share/gnome-shell/extensions/",
+        "/extension.js"
+    )
+
+    return extensions
+
 functions = {
     "gtk-themes": get_gtk_themes(),
     "icon-themes": get_icon_themes(),

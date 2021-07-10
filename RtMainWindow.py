@@ -22,7 +22,7 @@ class RtMainWindow(Gtk.Window):
             self.stack = Gtk.Stack()
             self.stackbox = Gtk.Box()
 
-            for file in os.listdir(dir):
+            for file in sorted(os.listdir(dir)):
                 if file.endswith(".yml") or file.endswith(".yaml"):
                     with open(dir + "/" + file) as f:
                         self.data = yaml.safe_load(f)
@@ -40,8 +40,8 @@ class RtMainWindow(Gtk.Window):
                                 self.stackpage.set_margin_end(10)
                                 self.stackpage.set_margin_top(10)
                                 self.stackpage.set_margin_bottom(10)
-
-                                self.stackpage.add(self.frame.label)
+                                if self.label is not None and self.label != "" and self.label.lower() != "none":
+                                    self.stackpage.add(self.frame.label)
                                 self.stackpage.add(self.frame)
                 self.stackpagename = os.path.basename(os.path.splitext(dir + "/" + file)[0])
                 self.stack.add_titled(self.stackpage, self.stackpagename.lower().replace(" ", "_"), self.stackpagename)
@@ -50,15 +50,11 @@ class RtMainWindow(Gtk.Window):
             self.stackbox.add(self.stack)
             self.window_stack.add_titled(self.stackbox, self.stackname.lower().replace(" ", "_"), self.stackname)
 
-
-        # self.ui_stack = Gtk.Stack()
-        # self.system_stack = Gtk.Stack()
-        # self.window_stack.add_titled(RtUiStack(), "ui", "UI")
-        # self.window_stack.add_titled(self.system_stack, "system", "System")
-
         self.stack_switcher = Gtk.StackSwitcher(stack=self.window_stack)
         self.header.set_custom_title(self.stack_switcher)
         self.set_titlebar(self.header)
 
         self.add(self.window_stack)
+
         self.show_all()
+        RtWidgets.check_for_dependent_extensions()

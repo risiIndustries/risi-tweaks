@@ -1,0 +1,49 @@
+# UI -> Layout
+- section:
+    name: None
+    settings:
+    - setting:
+      name: "Workspaces only on primary monitor"
+      type: ToggleGSetting
+      gsetting_schema: "org.gnome.mutter"
+      gsetting_key: "workspaces-only-on-primary"
+- section:
+    name: "Bar"
+    settings:
+    - setting:
+      name: "Activities Hot Corner (Top Left)"
+      type: ToggleGSetting
+      gsetting_schema: "org.gnome.desktop.interface"
+      gsetting_key: "enable-hot-corners"
+    - setting:
+      name: "Battery Percentage"
+      type: ToggleGSetting
+      gsetting_schema: "org.gnome.desktop.interface"
+      gsetting_key: "show-battery-percentage"
+    - setting:
+      name: "Show System Tray"
+      type: ExtensionToggle
+      extension: "appindicatorsupport@rgcjonas.gmail.com"
+- section:
+    name: "Clock & Calendar"
+    settings:
+    - setting:
+      name: "Show Weekday on Clock"
+      type: ToggleGSetting
+      gsetting_schema: "org.gnome.desktop.interface"
+      gsetting_key: "clock-show-weekday"
+    - setting:
+      name: "Show Date on Clock"
+      type: ToggleGSetting
+      gsetting_schema: "org.gnome.desktop.interface"
+      gsetting_key: "clock-show-date"
+    - setting:
+      name: "Show Seconds on Weekday"
+      type: ToggleGSetting
+      gsetting_schema: "org.gnome.desktop.interface"
+      gsetting_key: "clock-show-seconds"
+    - setting:
+      name: "Show Week Numbers on Calendar"
+      type: ToggleGSetting
+      gsetting_schema: "org.gnome.desktop.calendar"
+      gsetting_key: "show-weekdate"

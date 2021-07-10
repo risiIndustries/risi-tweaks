@@ -33,7 +33,7 @@
       dropdown_options:
         - "Click to Focus"
         - "Focus on Hover"
-        - "Right Click"
+        - "Right Click to Focus"
       dropdown_keys:
         - "click"
         - "sloppy"
@@ -92,3 +92,30 @@
         - "minimize"
         - "none"
         - "toggle-maximize"
+    - setting:
+      name: "Button Layout"
+      type: DropdownGSetting
+      gsetting_schema: "org.gnome.desktop.wm.preferences"
+      gsetting_key: "button-layout"
+      dropdown_options:
+        - "risiOS Left"
+        - "risiOS Right (default)"
+        - "elementary"
+        - "elementary Inverted"
+        - "GNOME Left"
+        - "GNOME Right"
+        - "macOS Left"
+        - "macOS Right"
+        - "Windows Left"
+        - "Windows Right"
+      dropdown_keys:
+        - "minimize,close:appmenu"
+        - "appmenu:minimize,close"
+        - "close,appmenu:maximize"
+        - "maximize,appmenu:close"
+        - "close:appmenu"
+        - "appmenu:close"
+        - "close,minimize,maximize:appmenu"
+        - "appmenu:maximize,minimize,close"
+        - "close,maximize,minimize:appmenu"
+        - "appmenu:minimize,maximize,close"

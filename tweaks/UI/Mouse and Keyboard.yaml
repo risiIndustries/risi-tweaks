@@ -1,0 +1,72 @@
+# UI -> Mouse And Keyboard
+- section:
+    name: "Keyboard"
+    settings:
+    - setting:
+      name: "Show Extended Input Sources in Settings"
+      type: ToggleGSetting
+      gsetting_schema: "org.gnome.desktop.input-sources"
+      gsetting_key: "show-all-sources"
+    - setting:
+      name: "Keybinding Preset (GTK Apps Only)"
+      type: DropdownGSetting
+      gsetting_schema: "org.gnome.desktop.interface"
+      gsetting_key: "gtk-key-theme"
+      dropdown_options:
+        - "Default"
+        - "Emacs"
+      dropdown_keys: "lower"
+    - setting:
+      name: "Key Repeat Delay (Milliseconds)"
+      type: SpinButtonGSetting
+      gsetting_schema: "org.gnome.desktop.peripherals.keyboard"
+      gsetting_key: "delay"
+      spinbutton_value_type: uint
+      spinbutton_min: 100
+      spinbutton_max: 2000
+      spinbutton_step: 100
+      stepbutton_percentage: False
+- section:
+    name: "Mouse"
+    settings:
+    - setting:
+      name: "Acceleration Profile"
+      type: DropdownGSetting
+      gsetting_schema: "org.gnome.desktop.peripherals.mouse"
+      gsetting_key: "accel-profile"
+      dropdown_options:
+        - "Adaptive"
+        - "Default"
+        - "Flat"
+      dropdown_keys: "lower"
+    - setting:
+      name: "CTRL Highlights Mouse Pointer"
+      type: ToggleGSetting
+      gsetting_schema: "org.gnome.desktop.interface"
+      gsetting_key: "locate-pointer"
+    - setting:
+      name: "Middle Click Paste (GTK Apps Only)"
+      type: ToggleGSetting
+      gsetting_schema: "org.gnome.desktop.interface"
+      gsetting_key: "gtk-enable-primary-paste"
+- section:
+    name: "Touchpad"
+    settings:
+    - setting:
+      name: "Disable Touchpad While Typing"
+      type: ToggleGSetting
+      gsetting_schema: "org.gnome.desktop.peripherals.touchpad"
+      gsetting_key: "disable-while-typing"
+    - setting:
+      name: "Mouse Click Emulation"
+      type: DropdownGSetting
+      gsetting_schema: "org.gnome.desktop.peripherals.touchpad"
+      gsetting_key: "click-method"
+      dropdown_options:
+        - "Fingers"
+        - "Areas"
+        - "Disabled"
+      dropdown_keys:
+        - "fingers"
+        - "areas"
+        - "none"

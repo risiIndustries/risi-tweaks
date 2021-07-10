@@ -1,5 +1,13 @@
 # UI -> Appearance
 - section:
+    name: None
+    settings:
+    - setting:
+      name: "Enable Animations"
+      type: ToggleGSetting
+      gsetting_schema: "org.gnome.desktop.interface"
+      gsetting_key: "enable-animations"
+- section:
     name: "Theming"
     settings:
     - setting:
@@ -75,6 +83,8 @@
       type: SpinButtonGSetting
       gsetting_schema: "org.gnome.desktop.interface"
       gsetting_key: "text-scaling-factor"
+      spinbutton_value_type: double
       spinbutton_min: 0.50
       spinbutton_max: 3.00
       spinbutton_step: 0.05
+      stepbutton_percentage: True
