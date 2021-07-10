@@ -2,16 +2,11 @@
 # Licensed Under LGPL3
 # By PizzaLovingNerd
 
-import os
 import gi
-
 import RtUtils
 
 gi.require_version("Gtk", "3.0")
 from gi.repository import Gtk, Gio
-
-_HOME = os.getenv("HOME")
-_EXTENSIONS = "{0}/.local/share/gnome-shell/extensions/".format(_HOME)
 
 # For code optimization by avoiding duplicate classes
 known_schemas = {"org.gnome.shell": Gio.Settings.new("org.gnome.shell")}
@@ -224,7 +219,6 @@ class DropdownGSetting(Dropdown):
                     else:
                         self.dropdown.set_active(self.case[new_value])
                 except KeyError:
-                    print("KeyError")
                     if type(self.case) == list and self.new_value not in self.case:
                         self.case.append(new_value)
                     self.dropdown.append_text(new_value)
@@ -335,70 +329,3 @@ class SpinButtonGSetting(SpinButton):
                     self.spin_button.set_value(
                         self.setting.get_double(key0) * 100
                     )
-
-
-requires_extension = []
-
-
-def check_for_dependent_extensions():
-    extensions = RtUtils.get_extensions()
-    for widget in requires_extension:
-        widget.set_visible(widget.required_extension in extensions)
-
-
-def setting_to_widget(widget):
-    if "description" in widget:
-        box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
-        box.add(get_widget_from_setting(widget))
-        box.add(Description(widget["description"]))
-        return box
-    else:
-        return get_widget_from_setting(widget)
-
-def get_widget_from_setting(widget):
-    if "type" in widget:
-        if widget["type"] == "ToggleGSetting":
-            return ToggleGSetting(
-                widget["name"],
-                widget["gsetting_schema"],
-                widget["gsetting_key"]
-            )
-        elif widget["type"] == "DropdownGSetting":
-            return DropdownGSetting(
-                widget["name"],
-                widget["gsetting_schema"],
-                widget["gsetting_key"],
-                widget["dropdown_options"],
-                widget["dropdown_keys"]
-            )
-        elif widget["type"] == "FontGSetting":
-            return FontGSetting(
-                widget["name"],
-                widget["gsetting_schema"],
-                widget["gsetting_key"]
-            )
-        elif widget["type"] == "SpinButtonGSetting":
-            return SpinButtonGSetting(
-                widget["name"],
-                widget["gsetting_schema"],
-                widget["gsetting_key"],
-                widget["spinbutton_value_type"],
-                widget["spinbutton_min"],
-                widget["spinbutton_max"],
-                widget["spinbutton_step"],
-                widget["stepbutton_percentage"]
-            )
-        elif widget["type"] == "ExtensionToggle":
-            extension_required_widget = ExtensionToggle(
-                widget["name"],
-                widget["extension"]
-            )
-            extension_required_widget.required_extension = widget["extension"]
-            requires_extension.append(extension_required_widget)
-            return extension_required_widget
-        else:
-            print(widget)
-            return Label("Error")
-    else:
-        print(widget)
-        return Label("Error")

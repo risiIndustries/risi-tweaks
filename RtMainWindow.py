@@ -2,7 +2,9 @@ import gi
 import os
 import glob
 import yaml
-import RtWidgets
+import RtBaseWidgets
+import RtCustomWidgets
+import RtSettingsToWidget
 
 gi.require_version("Gtk", "3.0")
 from gi.repository import Gtk
@@ -33,9 +35,9 @@ class RtMainWindow(Gtk.Window):
                             for settings in self.section:
                                 if settings == "name":
                                     continue
-                                self.frame = RtWidgets.Frame(self.label)
+                                self.frame = RtBaseWidgets.Frame(self.label)
                                 for setting in self.section["settings"]:
-                                    self.frame.add(RtWidgets.setting_to_widget(setting))
+                                    self.frame.add(RtSettingsToWidget.setting_to_widget(setting))
                                 self.stackpage.set_margin_start(10)
                                 self.stackpage.set_margin_end(10)
                                 self.stackpage.set_margin_top(10)
@@ -57,4 +59,6 @@ class RtMainWindow(Gtk.Window):
         self.add(self.window_stack)
 
         self.show_all()
-        RtWidgets.check_for_dependent_extensions()
+
+        RtSettingsToWidget.check_for_dependent_extensions()
+        RtSettingsToWidget.run_start_functions()

@@ -24,6 +24,7 @@
       name: "Show System Tray"
       type: ExtensionToggle
       extension: "appindicatorsupport@rgcjonas.gmail.com"
+      requires_extension: "appindicatorsupport@rgcjonas.gmail.com"
 - section:
     name: "Clock & Calendar"
     settings:

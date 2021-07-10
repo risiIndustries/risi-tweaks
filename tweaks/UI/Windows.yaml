@@ -39,6 +39,9 @@
       description: |-
         Click to Focus: Windows are focused when they are clicked.
         Focus on Hover: A window is focused when hovered over.
+    - setting:
+      name: "Raise Windows When Focused\n(Needs to be hidden when Window Focus is \"click\")"
+      type: RaiseWindowWhenFocused
 - section:
     name: "Window Titlebar"
     settings:
