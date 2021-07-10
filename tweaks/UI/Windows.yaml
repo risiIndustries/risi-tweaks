@@ -31,13 +31,14 @@
       gsetting_schema: "org.gnome.desktop.wm.preferences"
       gsetting_key: "focus-mode"
       dropdown_options:
-        - "Click to Focus"
+        - "Click to Focus (Recommended)"
         - "Focus on Hover"
-        - "Right Click to Focus"
       dropdown_keys:
         - "click"
         - "sloppy"
-        - "mouse"
+      description: |-
+        Click to Focus: Windows are focused when they are clicked.
+        Focus on Hover: A window is focused when hovered over.
 - section:
     name: "Window Titlebar"
     settings:

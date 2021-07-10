@@ -16,6 +16,7 @@ _EXTENSIONS = "{0}/.local/share/gnome-shell/extensions/".format(_HOME)
 # For code optimization by avoiding duplicate classes
 known_schemas = {"org.gnome.shell": Gio.Settings.new("org.gnome.shell")}
 
+
 # Frame Container (Thanks PizzaMartijn)
 class Frame(Gtk.Frame):
     def __init__(self, text):
@@ -36,7 +37,6 @@ class Frame(Gtk.Frame):
         self.box.add(*args)
 
 
-
 # Generic Option
 class Option(Gtk.Box):
     def __init__(self, text):
@@ -48,6 +48,7 @@ class Option(Gtk.Box):
         self.label.set_hexpand(True)
         self.add(self.label)
 
+
 # Label and Description Options
 class Label(Option):
     def __init__(self, text):
@@ -57,13 +58,15 @@ class Label(Option):
         self.label.set_margin_top(15)
         self.label.set_margin_bottom(10)
 
+
 class Description(Option):
     def __init__(self, text):
         Option.__init__(self, text)
         self.label.set_markup("<small>" + text + "</small>")
         self.label.get_style_context().add_class('dim-label')
         self.label.set_margin_top(5)
-        self.label.set_margin_bottom(2.5)
+        self.label.set_margin_bottom(5)
+
 
 # Toggle Options
 class Toggle(Option):
@@ -335,6 +338,8 @@ class SpinButtonGSetting(SpinButton):
 
 
 requires_extension = []
+
+
 def check_for_dependent_extensions():
     extensions = RtUtils.get_extensions()
     for widget in requires_extension:
@@ -342,7 +347,16 @@ def check_for_dependent_extensions():
 
 
 def setting_to_widget(widget):
-    try:
+    if "description" in widget:
+        box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
+        box.add(get_widget_from_setting(widget))
+        box.add(Description(widget["description"]))
+        return box
+    else:
+        return get_widget_from_setting(widget)
+
+def get_widget_from_setting(widget):
+    if "type" in widget:
         if widget["type"] == "ToggleGSetting":
             return ToggleGSetting(
                 widget["name"],
@@ -385,6 +399,6 @@ def setting_to_widget(widget):
         else:
             print(widget)
             return Label("Error")
-    except KeyError as e:
+    else:
         print(widget)
         return Label("Error")

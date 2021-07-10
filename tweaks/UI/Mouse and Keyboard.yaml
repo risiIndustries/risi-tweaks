@@ -70,3 +70,7 @@
         - "fingers"
         - "areas"
         - "none"
+      description: |
+        Fingers: Click the touchpad with two fingers for right-click, and three fingers for middle click.
+        Areas: Click the bottom right of the touchpad for right click and the bottom middle for middle click.
+        Disabled: Don't use mouse click emulation.

@@ -3,7 +3,7 @@
     name: None
     settings:
     - setting:
-      name: "Workspaces only on primary monitor"
+      name: "Workspaces Only on Primary Monitor"
       type: ToggleGSetting
       gsetting_schema: "org.gnome.mutter"
       gsetting_key: "workspaces-only-on-primary"
