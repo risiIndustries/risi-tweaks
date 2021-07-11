@@ -101,6 +101,7 @@ def get_cursor_themes():
 
     return cursor_themes
 
+
 def get_extensions():
     extensions = []
 
@@ -115,6 +116,40 @@ def get_extensions():
         "/extension.js"
     )
 
+    return extensions
+
+
+def get_local_extension_dirs():
+    extensions = []
+
+    if os.path.isdir(_HOME + "/.local/share/gnome-shell/extensions"):
+        for item in os.listdir(_HOME + "/.local/share/gnome-shell/extensions"):
+            if item not in extensions and os.path.isdir(_HOME + "/.local/share/gnome-shell/extensions/" + item) \
+                    and os.path.exists(_HOME + "/.local/share/gnome-shell/extensions/" + item + "/metadata.json"):
+                extensions.append(_HOME + "/.local/share/gnome-shell/extensions/" + item)
+
+    return extensions
+
+
+def get_system_extension_dirs():
+    extensions = []
+
+    if os.path.isdir("/usr/share/gnome-shell/extensions/"):
+        for item in os.listdir("/usr/share/gnome-shell/extensions/"):
+            if item not in extensions and os.path.isdir("/usr/share/gnome-shell/extensions/" + item) \
+                    and os.path.exists("/usr/share/gnome-shell/extensions/" + item + "/extension.js"):
+                extensions.append("/usr/share/gnome-shell/extensions/" + item)
+
+    return extensions
+
+
+def get_local_extensions():
+    extensions = []
+    extensions = check_dir_for_file_to_list(
+        extensions,
+        _HOME + "/.local/share/gnome-shell/extensions/",
+        "/extension.js"
+    )
     return extensions
 
 functions = {

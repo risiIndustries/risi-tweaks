@@ -1,6 +1,7 @@
 # All of the custom widgets we might need for risiTweaks are in this file.
 # Licensed Under LGPL3
 # By PizzaLovingNerd
+import subprocess
 
 import gi
 import RtUtils
@@ -329,3 +330,14 @@ class SpinButtonGSetting(SpinButton):
                     self.spin_button.set_value(
                         self.setting.get_double(key0) * 100
                     )
+
+# Subprocess button
+class SubprocessButton(Gtk.Button):
+    def __init__(self, label, command):
+        Gtk.Button.__init__(self)
+        self.command = command
+        self.set_label(label)
+        self.connect("clicked", self.run_command)
+
+    def run_command(self):
+        subprocess.run(self.command)

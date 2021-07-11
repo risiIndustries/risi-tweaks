@@ -11,7 +11,7 @@ BuildArch:	noarch
 
 BuildRequires:  python
 Requires:       python
-Requires:	python3-gobject
+Requires:	python3-gobject, python3-yaml
 
 %description
 The tweak tool for risiOS. Full alternative to GNOME Tweaks

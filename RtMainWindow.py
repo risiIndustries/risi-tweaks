@@ -4,6 +4,7 @@ import glob
 import yaml
 import RtBaseWidgets
 import RtCustomWidgets
+import RtExtensionWidgets
 import RtSettingsToWidget
 
 gi.require_version("Gtk", "3.0")
@@ -13,6 +14,7 @@ from gi.repository import Gtk
 class RtMainWindow(Gtk.Window):
     def __init__(self):
         Gtk.Window.__init__(self, title="Risi Tweaks")
+        self.set_default_size(-1, 500)
 
         # Creating the Header Bar and the two views for the Header Bar
         self.header = Gtk.HeaderBar()
@@ -45,12 +47,20 @@ class RtMainWindow(Gtk.Window):
                                 if self.label is not None and self.label != "" and self.label.lower() != "none":
                                     self.stackpage.add(self.frame.label)
                                 self.stackpage.add(self.frame)
+                                self.scrolled_page = Gtk.ScrolledWindow()
+                                self.scrolled_page.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC)
+                                self.scrolled_page.add(self.stackpage)
                 self.stackpagename = os.path.basename(os.path.splitext(dir + "/" + file)[0])
-                self.stack.add_titled(self.stackpage, self.stackpagename.lower().replace(" ", "_"), self.stackpagename)
+                self.stack.add_titled(self.scrolled_page, self.stackpagename.lower().replace(" ", "_"), self.stackpagename)
             self.stackname = os.path.basename(dir)
             self.stackbox.add(Gtk.StackSidebar(stack=self.stack))
             self.stackbox.add(self.stack)
             self.window_stack.add_titled(self.stackbox, self.stackname.lower().replace(" ", "_"), self.stackname)
+
+        self.extension_scroll = Gtk.ScrolledWindow()
+        self.extension_scroll.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC)
+        self.extension_scroll.add(RtExtensionWidgets.ExtensionsPage())
+        self.window_stack.add_titled(self.extension_scroll, "extensions", "Extensions")
 
         self.stack_switcher = Gtk.StackSwitcher(stack=self.window_stack)
         self.header.set_custom_title(self.stack_switcher)
