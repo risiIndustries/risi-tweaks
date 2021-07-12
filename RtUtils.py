@@ -5,6 +5,7 @@
 # By PizzaLovingNerd
 
 import os
+from gi.repository import Gio
 
 _HOME = os.getenv("HOME")
 
@@ -101,59 +102,80 @@ def get_cursor_themes():
 
     return cursor_themes
 
-
-def get_extensions():
-    extensions = []
-
-    extensions = check_dir_for_file_to_list(
-        extensions,
-        _HOME + "/.local/share/gnome-shell/extensions/",
-        "/extension.js"
-    )
-    extensions = check_dir_for_file_to_list(
-        extensions,
-        "/usr/share/gnome-shell/extensions/",
-        "/extension.js"
-    )
-
-    return extensions
-
-
-def get_local_extension_dirs():
-    extensions = []
-
-    if os.path.isdir(_HOME + "/.local/share/gnome-shell/extensions"):
-        for item in os.listdir(_HOME + "/.local/share/gnome-shell/extensions"):
-            if item not in extensions and os.path.isdir(_HOME + "/.local/share/gnome-shell/extensions/" + item) \
-                    and os.path.exists(_HOME + "/.local/share/gnome-shell/extensions/" + item + "/metadata.json"):
-                extensions.append(_HOME + "/.local/share/gnome-shell/extensions/" + item)
-
-    return extensions
-
-
-def get_system_extension_dirs():
-    extensions = []
-
-    if os.path.isdir("/usr/share/gnome-shell/extensions/"):
-        for item in os.listdir("/usr/share/gnome-shell/extensions/"):
-            if item not in extensions and os.path.isdir("/usr/share/gnome-shell/extensions/" + item) \
-                    and os.path.exists("/usr/share/gnome-shell/extensions/" + item + "/extension.js"):
-                extensions.append("/usr/share/gnome-shell/extensions/" + item)
-
-    return extensions
-
-
-def get_local_extensions():
-    extensions = []
-    extensions = check_dir_for_file_to_list(
-        extensions,
-        _HOME + "/.local/share/gnome-shell/extensions/",
-        "/extension.js"
-    )
-    return extensions
+#
+# def get_extensions():
+#     extensions = []
+#
+#     extensions = check_dir_for_file_to_list(
+#         extensions,
+#         _HOME + "/.local/share/gnome-shell/extensions/",
+#         "/extension.js"
+#     )
+#     extensions = check_dir_for_file_to_list(
+#         extensions,
+#         "/usr/share/gnome-shell/extensions/",
+#         "/extension.js"
+#     )
+#
+#     return extensions
+#
+#
+# def get_local_extension_dirs():
+#     extensions = []
+#
+#     if os.path.isdir(_HOME + "/.local/share/gnome-shell/extensions"):
+#         for item in os.listdir(_HOME + "/.local/share/gnome-shell/extensions"):
+#             if item not in extensions and os.path.isdir(_HOME + "/.local/share/gnome-shell/extensions/" + item) \
+#                     and os.path.exists(_HOME + "/.local/share/gnome-shell/extensions/" + item + "/metadata.json"):
+#                 extensions.append(_HOME + "/.local/share/gnome-shell/extensions/" + item)
+#
+#     return extensions
+#
+#
+# def get_system_extension_dirs():
+#     extensions = []
+#
+#     if os.path.isdir("/usr/share/gnome-shell/extensions/"):
+#         for item in os.listdir("/usr/share/gnome-shell/extensions/"):
+#             if item not in extensions and os.path.isdir("/usr/share/gnome-shell/extensions/" + item) \
+#                     and os.path.exists("/usr/share/gnome-shell/extensions/" + item + "/extension.js"):
+#                 extensions.append("/usr/share/gnome-shell/extensions/" + item)
+#
+#     return extensions
+#
+#
+# def get_local_extensions():
+#     extensions = []
+#     extensions = check_dir_for_file_to_list(
+#         extensions,
+#         _HOME + "/.local/share/gnome-shell/extensions/",
+#         "/extension.js"
+#     )
+#     return extensions
 
 functions = {
     "gtk-themes": get_gtk_themes(),
     "icon-themes": get_icon_themes(),
     "cursor-themes": get_cursor_themes()
 }
+
+# Proxy needed by extensions.
+# Some of the code is stolen from GNOME Tweaks (Thank you)
+class ExtensionProxy:
+    def __init__(self):
+        self.proxy = Gio.DBusProxy.new_sync(
+            Gio.bus_get_sync(Gio.BusType.SESSION, None),
+            0, None,
+            'org.gnome.Shell',
+            '/org/gnome/Shell',
+            'org.gnome.Shell.Extensions',
+            None
+        )
+        self.extensions = self.proxy.ListExtensions()
+        print(self.proxy)
+
+    def remove_extension(self, uuid):
+        return self.proxy.UninstallExtension('(s)', uuid)
+
+    def refresh(self):
+        self.__init__()

@@ -86,9 +86,11 @@ def get_custom_widget(setting):
 
 
 def check_for_dependent_extensions():
-    extensions = RtUtils.get_extensions()
     for widget in requires_extension:
-        widget.set_visible(widget.requires_extension in extensions)
+        widget.set_visible(True)
+    # extensions = RtUtils.get_extensions()
+    # for widget in requires_extension:
+    #     widget.set_visible(widget.requires_extension in extensions)
 
 
 def run_start_functions():

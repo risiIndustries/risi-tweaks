@@ -339,5 +339,5 @@ class SubprocessButton(Gtk.Button):
         self.set_label(label)
         self.connect("clicked", self.run_command)
 
-    def run_command(self):
+    def run_command(self, button):
         subprocess.run(self.command)
