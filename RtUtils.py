@@ -172,7 +172,6 @@ class ExtensionProxy:
             None
         )
         self.extensions = self.proxy.ListExtensions()
-        print(self.proxy)
 
     def remove_extension(self, uuid):
         return self.proxy.UninstallExtension('(s)', uuid)

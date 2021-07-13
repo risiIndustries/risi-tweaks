@@ -18,6 +18,7 @@ class ExtensionTopItem(RtBaseWidgets.Option):
         self.set_margin_top(10)
         self.set_margin_bottom(10)
         self.setting = RtBaseWidgets.known_schemas["org.gnome.shell"]
+        self.sensitive = True
         self.revealer = revealer
         self.extension = extension
         self.extension_enabled = self.setting.get_strv("enabled-extensions")
@@ -26,17 +27,18 @@ class ExtensionTopItem(RtBaseWidgets.Option):
             self.extension["state"] != 2 and \
             self.extension["state"] != 6:
 
+
             if self.extension["state"] == 3:
-                self.indicator = Gtk.Image.new_from_icon_name("dialog-name", Gtk.IconSize.LARGE_TOOLBAR)
-                self.indicator.set_tooltip_text("An error has occurred")
+                self.indicator = Gtk.Image.new_from_icon_name("dialog-error", Gtk.IconSize.LARGE_TOOLBAR)
+                self.sensitive = False
 
             if self.extension["state"] == 4:
-                self.indicator = Gtk.Image.new_from_icon_name("software-update-available", Gtk.IconSize.LARGE_TOOLBAR)
-                self.indicator.set_tooltip_text("An update is available for this extension")
+                self.indicator = Gtk.Image.new_from_icon_name("dialog-error", Gtk.IconSize.LARGE_TOOLBAR)
+                self.sensitive = False
 
             if self.extension["state"] == 5:
                 self.indicator = Gtk.Image.new_from_icon_name("emblem-downloads", Gtk.IconSize.LARGE_TOOLBAR)
-                self.indicator.set_tooltip_text("This extension is currently downloading")
+                self.sensitive = False
 
             self.indicator.set_margin_end(10)
 
@@ -49,12 +51,14 @@ class ExtensionTopItem(RtBaseWidgets.Option):
             self.settings_button.get_style_context().add_class("circular")
             self.settings_button.set_margin_end(10)
             self.settings_button.connect("clicked", self.open_extension_settings)
+            self.settings_button.set_sensitive(self.sensitive)
             self.add(self.settings_button)
 
         self.switch = Gtk.Switch()
         self.switch.set_margin_bottom(5)
         self.switch.set_margin_top(5)
         self.switch.set_margin_end(10)
+        self.switch.set_sensitive(self.sensitive)
         self.switch.set_state(self.extension["uuid"] in self.extension_enabled)
         self.add(self.switch)
 
@@ -107,12 +111,31 @@ class ExtensionBottomItem(RtBaseWidgets.Option):
         self.extension = extension
         self.set_margin_bottom(10)
 
+        if self.extension["state"] == 4 or self.extension["state"] == 4 or self.extension["state"] == 5:
+            self.error = Gtk.Label(xalign=0)
+            self.error.set_margin_start(15)
+            self.error.set_margin_end(15)
+            self.error.set_ellipsize(Pango.EllipsizeMode.END)
+
+            if self.extension["state"] == 3:
+                self.error.set_markup(
+                    "Error: <b>An unknown error has occurred</b>"
+                )
+            if self.extension["state"] == 4:
+                self.error.set_markup(
+                    "Error: <b>This extension is incompatible with your version of GNOME</b>"
+                )
+
+            if self.extension["state"] == 5:
+                self.error.set_markup(
+                    "Error: <b>This extension is currently downloading</b>"
+                )
+            self.add(self.error)
+
         if "description" in self.extension:
             self.description = Gtk.Label(xalign=0)
             self.description.set_margin_start(15)
             self.description.set_margin_end(15)
-            self.description.set_margin_bottom(3)
-            # self.description.set_margin_top(0)
             self.description.set_ellipsize(Pango.EllipsizeMode.END)
             self.description.set_markup(
                 "Description: <b>" +
@@ -125,8 +148,6 @@ class ExtensionBottomItem(RtBaseWidgets.Option):
             self.original_author = Gtk.Label(xalign=0)
             self.original_author.set_margin_start(15)
             self.original_author.set_margin_end(15)
-            self.original_author.set_margin_bottom(3)
-            # self.description.set_margin_top(0)
             self.original_author.set_ellipsize(Pango.EllipsizeMode.END)
             self.original_author.set_markup(
                 "Original Author: <b>" +
@@ -138,7 +159,6 @@ class ExtensionBottomItem(RtBaseWidgets.Option):
         if "version" in self.extension:
             self.label = Gtk.Label(xalign=0)
             self.label.set_margin_start(15)
-            # self.label.set_margin_bottom(3)
             self.label.set_markup("Version: <b>" + str(self.extension["version"]) + "</b>")
             self.add(self.label)
         self.button_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
@@ -238,9 +258,6 @@ class ExtensionsPage(Gtk.Box):
         self.refresh_button = Gtk.Button(label="Refresh Extensions")
         self.refresh_button.connect("clicked", self.refresh_extensions)
         self.button_box.add(self.refresh_button)
-        self.add_from_file_button = Gtk.Button(label="Add Extension From File")
-        self.add_from_file_button.connect("clicked", self.add_extension)
-        self.button_box.add(self.add_from_file_button)
         self.add_from_web_button = Gtk.Button(label="Add Extension From Web")
         self.add_from_web_button.connect("clicked", launch_website, "https://extensions.gnome.org/")
         self.button_box.add(self.add_from_web_button)
@@ -270,34 +287,17 @@ class ExtensionsPage(Gtk.Box):
         self.set_margin_top(10)
         self.set_margin_bottom(10)
 
-    def add_extension(self, button):
-        file = ExtensionPicker()
-        sp = subprocess.Popen(["/usr/bin/gnome-extensions", "install", file.get_path()])
-        self.refresh_extensions(button)
+    def setting_changed(self, setting, key):
+        if key == "enabled-extensions":
+            self.refresh_extensions(None)
 
 
-    def refresh_extensions(self, button):
+    def refresh_extensions(self, *args):
         self.extension_frames.destroy()
         extension_proxy.refresh()
         self.extension_frames = ExtensionsFrames()
         self.add(self.extension_frames)
         self.extension_frames.show_all()
-
-class ExtensionPicker(Gtk.FileChooserDialog):
-    def __init__(self):
-        Gtk.FileChooserDialog.__init__(
-            "Choose an Extension",
-            self, Gtk.FileChooserAction.OPEN,
-            "Cancel", Gtk.ResponseType.CANCEL,
-            "OK", Gtk.ResponseType.OK
-        )
-        self.filter = Gtk.FileFilter()
-        self.filter.add_pattern("*.shell-extension.zip")
-        self.filter.add_pattern("*.zip")
-        self.add_filter(self.filter)
-
-        self.file = self.run()
-        return self.file
 
 def launch_website(button, url):
     Gtk.show_uri_on_window(None, url, Gdk.CURRENT_TIME)
