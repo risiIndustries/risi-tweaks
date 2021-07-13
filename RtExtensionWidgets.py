@@ -1,6 +1,7 @@
-import json
-import os
-import shutil
+# This file contains all the widgets that used for the extension page
+# Licensed Under GPL3
+# By PizzaLovingNerd
+
 import subprocess
 import gi
 
@@ -12,6 +13,9 @@ from gi.repository import Gtk, Gdk, Gio, Pango
 
 extension_proxy = RtUtils.ExtensionProxy()
 
+
+# This is where the extension name, settings button,
+# toggle switch, reveal button, and error indicator go
 class ExtensionTopItem(RtBaseWidgets.Option):
     def __init__(self, extension, revealer):
         RtBaseWidgets.Option.__init__(self, extension["name"])
@@ -23,6 +27,15 @@ class ExtensionTopItem(RtBaseWidgets.Option):
         self.extension = extension
         self.extension_enabled = self.setting.get_strv("enabled-extensions")
 
+        # Checks if the extension has an error and
+        # creates an indicator if it does
+        # States:
+        # 1 = Enabled
+        # 2 = Disabled
+        # 3 = Error
+        # 4 = Needs update to new GNOME version
+        # 5 = Downloading
+        # 6 = Initialized
         if self.extension["state"] != 1 and \
             self.extension["state"] != 2 and \
             self.extension["state"] != 6:
@@ -44,6 +57,7 @@ class ExtensionTopItem(RtBaseWidgets.Option):
 
             self.add(self.indicator)
 
+        # Generates settings button if extension has settings
         if self.extension["hasPrefs"]:
             self.settings_button = Gtk.Button()
             self.settings_button.set_image(Gtk.Image.new_from_icon_name("emblem-system-symbolic", Gtk.IconSize.BUTTON))
@@ -54,6 +68,7 @@ class ExtensionTopItem(RtBaseWidgets.Option):
             self.settings_button.set_sensitive(self.sensitive)
             self.add(self.settings_button)
 
+        # Extension Toggle Switch
         self.switch = Gtk.Switch()
         self.switch.set_margin_bottom(5)
         self.switch.set_margin_top(5)
@@ -62,6 +77,7 @@ class ExtensionTopItem(RtBaseWidgets.Option):
         self.switch.set_state(self.extension["uuid"] in self.extension_enabled)
         self.add(self.switch)
 
+        # Button to reveal bottom of ExtensionItem
         self.reveal_button = Gtk.Button()
         self.reveal_button.set_image(Gtk.Image.new_from_icon_name("pan-end-symbolic", Gtk.IconSize.BUTTON))
         self.reveal_button.set_relief(Gtk.ReliefStyle.NONE)
@@ -73,10 +89,13 @@ class ExtensionTopItem(RtBaseWidgets.Option):
         self.switch.connect("state-set", self.state_set)
         self.setting.connect("changed", self.setting_changed)
 
+    # Opens preferences for extension
     def open_extension_settings(self, button):
         subprocess.run(["/usr/bin/gnome-extensions", "prefs", self.extension["uuid"]])
 
+    # Toggles if bottom of ExtensionItem is revealed.
     def reveal_button_clicked(self, button):
+        # self.revealer is the revealer that holds the bottom of the item
         self.revealer.set_reveal_child(not self.revealer.get_reveal_child())
         if self.revealer.get_reveal_child():
             button.get_style_context().add_class("expanded")
@@ -85,6 +104,7 @@ class ExtensionTopItem(RtBaseWidgets.Option):
             button.get_style_context().remove_class("expanded")
             button.set_image(Gtk.Image.new_from_icon_name("pan-end-symbolic", Gtk.IconSize.BUTTON))
 
+    # Sets if the extension should be enabled
     def state_set(self, switch, state):
         self.extension_enabled = self.setting.get_strv("enabled-extensions")
         if state is True and self.extension["uuid"] not in self.extension_enabled:
@@ -93,6 +113,8 @@ class ExtensionTopItem(RtBaseWidgets.Option):
             self.extension_enabled.remove(self.extension["uuid"])
         self.setting.set_strv("enabled-extensions", self.extension_enabled)
 
+    # Makes sure that the extension updates if someone uses
+    # dconf editor, GNOME Extensions, or the extension website to toggle one on.
     def setting_changed(self, setting, key):
         if key == "enabled-extensions":
             self.extension_enabled = self.setting.get_strv("enabled-extensions")
@@ -102,6 +124,8 @@ class ExtensionTopItem(RtBaseWidgets.Option):
                 self.switch.set_state(False)
 
 
+# The bottom of an ExtensionItem that is hidden by default.
+# Shows extra info, as well as buttons to remove and the website.
 class ExtensionBottomItem(RtBaseWidgets.Option):
     def __init__(self, extension):
         self.setting = RtBaseWidgets.known_schemas["org.gnome.shell"]
@@ -110,6 +134,16 @@ class ExtensionBottomItem(RtBaseWidgets.Option):
         self.set_spacing(7)
         self.extension = extension
         self.set_margin_bottom(10)
+
+        # Checks if the extension has an error and
+        # shows the error message if it does.
+        # States:
+        # 1 = Enabled
+        # 2 = Disabled
+        # 3 = Error
+        # 4 = Needs update to new GNOME version
+        # 5 = Downloading
+        # 6 = Initialized
 
         if self.extension["state"] == 4 or self.extension["state"] == 4 or self.extension["state"] == 5:
             self.error = Gtk.Label(xalign=0)
@@ -128,10 +162,11 @@ class ExtensionBottomItem(RtBaseWidgets.Option):
 
             if self.extension["state"] == 5:
                 self.error.set_markup(
-                    "Error: <b>This extension is currently downloading</b>"
+                    "Error: <b>This extension is currently downloading.</b>"
                 )
             self.add(self.error)
 
+        # Adds description for the extension
         if "description" in self.extension:
             self.description = Gtk.Label(xalign=0)
             self.description.set_margin_start(15)
@@ -144,6 +179,7 @@ class ExtensionBottomItem(RtBaseWidgets.Option):
             )
             self.add(self.description)
 
+        # Shows author
         if "original-author" in self.extension:
             self.original_author = Gtk.Label(xalign=0)
             self.original_author.set_margin_start(15)
@@ -156,6 +192,7 @@ class ExtensionBottomItem(RtBaseWidgets.Option):
             )
             self.add(self.original_author)
 
+        # Shows version
         if "version" in self.extension:
             self.label = Gtk.Label(xalign=0)
             self.label.set_margin_start(15)
@@ -163,6 +200,7 @@ class ExtensionBottomItem(RtBaseWidgets.Option):
             self.add(self.label)
         self.button_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
 
+        # Visit website button
         if "url" in self.extension and self.extension["url"] != "":
             self.url_button = Gtk.Button(label="Visit Website")
             # self.url_button.set_valign(Gtk.Align.START)
@@ -170,6 +208,8 @@ class ExtensionBottomItem(RtBaseWidgets.Option):
             self.url_button.set_margin_start(15)
             self.button_box.add(self.url_button)
 
+        # Checks if the extension is installed locally and
+        # Adds a remove button if it isn't.
         if self.extension["type"] == 2:
             self.remove_button = Gtk.Button(label="Remove")
             self.remove_button.get_style_context().add_class("destructive-action")
@@ -182,6 +222,7 @@ class ExtensionBottomItem(RtBaseWidgets.Option):
         else:
             self.add(self.button_box)
 
+    # Removes extension using extension proxy and refreshes the view.
     def remove_extension(self, button):
         extension_list = self.setting.get_strv("enabled-extensions")
         if self.extension["uuid"] in extension_list:
@@ -194,6 +235,7 @@ class ExtensionBottomItem(RtBaseWidgets.Option):
         self.destroy()
 
 
+# ExtensionItem, combines ExtensionTopItem and ExtensionBottomItem
 class ExtensionItem(Gtk.Box):
     def __init__(self, extension):
         Gtk.Box.__init__(self, orientation=Gtk.Orientation.VERTICAL)
@@ -210,6 +252,7 @@ class ExtensionItem(Gtk.Box):
         self.add(self.revealer)
 
 
+# Generates a list of extensions that can be put in a frame
 class ExtensionsList(Gtk.Box):
     def __init__(self, extensions, exttype):
         Gtk.Box.__init__(self, orientation=Gtk.Orientation.VERTICAL)
@@ -219,28 +262,32 @@ class ExtensionsList(Gtk.Box):
                 self.add(Gtk.Separator())
 
 
+# This generates the frames the extension lists go in.
 class ExtensionsFrames(Gtk.Box):
     def __init__(self):
         Gtk.Box.__init__(self, orientation=Gtk.Orientation.VERTICAL)
-        self.systemframe = RtBaseWidgets.Frame("Built-In Extensions")
-        self.localframe = RtBaseWidgets.Frame("Manually Installed Extensions")
+        self.systemframe = RtBaseWidgets.Frame("Built-In Extensions") # Frame for built-in extensions
+        self.localframe = RtBaseWidgets.Frame("Manually Installed Extensions") # Frame for local extensions
 
         self.extensions = extension_proxy.extensions
 
-        self.systemframe.add(ExtensionsList(self.extensions, 1))
-        self.localframe.add(ExtensionsList(self.extensions, 2))
+        self.systemframe.add(ExtensionsList(self.extensions, 1))  # Adds system installed extensions to system frame
+        self.localframe.add(ExtensionsList(self.extensions, 2))  # Adds locally installed extensions to system locally
 
         self.add(self.systemframe.label)
         self.add(self.systemframe)
         self.add(self.localframe.label)
         self.add(self.localframe)
 
+
+# This is the class for the extensions page that is put inside the main window
 class ExtensionsPage(Gtk.Box):
     def __init__(self):
         Gtk.Box.__init__(self, orientation=Gtk.Orientation.VERTICAL)
         self.top_frame = RtBaseWidgets.Frame("")
         self.disable_frame = RtBaseWidgets.Frame("")
 
+        # Top Frame with info and buttons
         self.warning_label = Gtk.Label(xalign=0.5)
         self.warning_label.set_markup(
             "<b>Warning:</b>\n"
@@ -252,6 +299,8 @@ class ExtensionsPage(Gtk.Box):
         self.warning_label.set_margin_start(10)
         self.warning_label.set_margin_top(10)
 
+        # Creates button box with Refresh button, restart GNOME button,
+        # and a button to launch extensions.gnome.org
         self.button_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
         self.button_box.set_margin_top(10)
         self.button_box.set_spacing(5)
@@ -270,7 +319,7 @@ class ExtensionsPage(Gtk.Box):
 
         self.top_frame.add(self.warning_label)
         self.top_frame.add(self.button_box)
-        self.disable_frame.add(
+        self.disable_frame.add(  # Add extension toggle
             RtBaseWidgets.ToggleGSetting(
                 "Disable Extensions", "org.gnome.shell", "disable-user-extensions"
             )
@@ -287,11 +336,13 @@ class ExtensionsPage(Gtk.Box):
         self.set_margin_top(10)
         self.set_margin_bottom(10)
 
+    # Refreshes extensions if an extension is enabled
     def setting_changed(self, setting, key):
         if key == "enabled-extensions":
             self.refresh_extensions(None)
 
-
+    # This function refreshes extensions by deleting the extension
+    # frames and reinitializing them
     def refresh_extensions(self, *args):
         self.extension_frames.destroy()
         extension_proxy.refresh()
@@ -299,5 +350,6 @@ class ExtensionsPage(Gtk.Box):
         self.add(self.extension_frames)
         self.extension_frames.show_all()
 
+# Button for launching websites
 def launch_website(button, url):
     Gtk.show_uri_on_window(None, url, Gdk.CURRENT_TIME)

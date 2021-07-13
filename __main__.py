@@ -1,5 +1,5 @@
-# Main file, loads up main window
-# Licensed Under LGPL3
+# Main file, loads up main window class
+# Licensed Under GPL3
 # By PizzaLovingNerd
 
 import gi

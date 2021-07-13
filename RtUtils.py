@@ -1,7 +1,6 @@
 # This file is a place to put extra functions for risiTweaks
-# so that we don't have a bunch of random functions at the
-# bottom of all our classes
-# Licensed Under LGPL3
+# that are used between multiple classes.
+# Licensed Under GPL3
 # By PizzaLovingNerd
 
 import os
@@ -9,7 +8,8 @@ from gi.repository import Gio
 
 _HOME = os.getenv("HOME")
 
-
+# Checks all subdirectories for a file and adds it to a list
+# (used for things like checking GTK themes)
 def check_dir_for_file_to_list(input_list, directory, file_check):
     if os.path.isdir(directory):
         for item in os.listdir(directory):
@@ -19,6 +19,8 @@ def check_dir_for_file_to_list(input_list, directory, file_check):
     return input_list
 
 
+# Scans for icon themes because cursor themes can be
+# considered icon themes so they need to be filter out
 def check_dir_for_icon_theme(input_list, directory, file_check):
     if os.path.isdir(directory):
         for item in os.listdir(directory):
@@ -33,6 +35,7 @@ def check_dir_for_icon_theme(input_list, directory, file_check):
     return input_list
 
 
+# Checks for Gtk theme
 def get_gtk_themes():
     gtk_themes = []
 
@@ -57,6 +60,7 @@ def get_gtk_themes():
     return gtk_themes
 
 
+# Checks for icon themes
 def get_icon_themes():
     icon_themes = []
 
@@ -81,6 +85,7 @@ def get_icon_themes():
     return icon_themes
 
 
+# Checks for cursor themes
 def get_cursor_themes():
     cursor_themes = []
 
@@ -102,65 +107,17 @@ def get_cursor_themes():
 
     return cursor_themes
 
-#
-# def get_extensions():
-#     extensions = []
-#
-#     extensions = check_dir_for_file_to_list(
-#         extensions,
-#         _HOME + "/.local/share/gnome-shell/extensions/",
-#         "/extension.js"
-#     )
-#     extensions = check_dir_for_file_to_list(
-#         extensions,
-#         "/usr/share/gnome-shell/extensions/",
-#         "/extension.js"
-#     )
-#
-#     return extensions
-#
-#
-# def get_local_extension_dirs():
-#     extensions = []
-#
-#     if os.path.isdir(_HOME + "/.local/share/gnome-shell/extensions"):
-#         for item in os.listdir(_HOME + "/.local/share/gnome-shell/extensions"):
-#             if item not in extensions and os.path.isdir(_HOME + "/.local/share/gnome-shell/extensions/" + item) \
-#                     and os.path.exists(_HOME + "/.local/share/gnome-shell/extensions/" + item + "/metadata.json"):
-#                 extensions.append(_HOME + "/.local/share/gnome-shell/extensions/" + item)
-#
-#     return extensions
-#
-#
-# def get_system_extension_dirs():
-#     extensions = []
-#
-#     if os.path.isdir("/usr/share/gnome-shell/extensions/"):
-#         for item in os.listdir("/usr/share/gnome-shell/extensions/"):
-#             if item not in extensions and os.path.isdir("/usr/share/gnome-shell/extensions/" + item) \
-#                     and os.path.exists("/usr/share/gnome-shell/extensions/" + item + "/extension.js"):
-#                 extensions.append("/usr/share/gnome-shell/extensions/" + item)
-#
-#     return extensions
-#
-#
-# def get_local_extensions():
-#     extensions = []
-#     extensions = check_dir_for_file_to_list(
-#         extensions,
-#         _HOME + "/.local/share/gnome-shell/extensions/",
-#         "/extension.js"
-#     )
-#     return extensions
 
+# Functions that yaml files can link too
 functions = {
     "gtk-themes": get_gtk_themes(),
     "icon-themes": get_icon_themes(),
     "cursor-themes": get_cursor_themes()
 }
 
-# Proxy needed by extensions.
-# Some of the code is stolen from GNOME Tweaks (Thank you)
+
+# Proxy needed by extensions to interface with them
+# Some of this code is stolen from GNOME Tweaks (Thank you)
 class ExtensionProxy:
     def __init__(self):
         self.proxy = Gio.DBusProxy.new_sync(

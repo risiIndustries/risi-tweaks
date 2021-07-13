@@ -1,6 +1,9 @@
+# This class converts settings from a yaml file to a widget.
+# Licensed under GPL3
+# By PizzaLovingNerd
+
 import RtBaseWidgets
 import RtCustomWidgets
-import RtUtils
 import gi
 
 gi.require_version("Gtk", "3.0")
@@ -11,66 +14,69 @@ requires_extension = []
 known_schemas = RtBaseWidgets.known_schemas
 
 
+# Checks for special properties in a widget before returning a widget
 def setting_to_widget(setting):
-    if "description" in setting:
+    if "description" in setting:  # Creates a box to add description under the widget if description is added.
         widget = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
-        widget.add(get_base_widget(setting))
-        widget.add(RtBaseWidgets.Description(setting["description"]))
+        widget.add(get_base_widget(setting))  # Gets the setting's needed widget from get_base_widget
+        widget.add(RtBaseWidgets.Description(setting["description"]))  # Adds description
     else:
-        widget = get_base_widget(setting)
+        widget = get_base_widget(setting)  # Gets the setting's needed widget from get_base_widget
 
-    if "requires_extension" in setting:
+    if "requires_extension" in setting:  # Checks if widget requires extension and adds it to list if it does.
         widget.requires_extension = setting["requires_extension"]
         requires_extension.append(widget)
 
     return widget
 
 
-def get_base_widget(widget):
-    if "type" in widget:
-        if widget["type"] == "ToggleGSetting":
+# Converts setting from yaml to widget
+def get_base_widget(setting):
+    if "type" in setting:
+        if setting["type"] == "ToggleGSetting":
             return RtBaseWidgets.ToggleGSetting(
-                widget["name"],
-                widget["gsetting"][0],
-                widget["gsetting"][1]
+                setting["name"],
+                setting["gsetting"][0],
+                setting["gsetting"][1]
             )
-        elif widget["type"] == "DropdownGSetting":
+        elif setting["type"] == "DropdownGSetting":
             return RtBaseWidgets.DropdownGSetting(
-                widget["name"],
-                widget["gsetting"][0],
-                widget["gsetting"][1],
-                widget["dropdown_options"],
-                widget["dropdown_keys"]
+                setting["name"],
+                setting["gsetting"][0],
+                setting["gsetting"][1],
+                setting["dropdown_options"],
+                setting["dropdown_keys"]
             )
-        elif widget["type"] == "FontGSetting":
+        elif setting["type"] == "FontGSetting":
             return RtBaseWidgets.FontGSetting(
-                widget["name"],
-                widget["gsetting"][0],
-                widget["gsetting"][1]
+                setting["name"],
+                setting["gsetting"][0],
+                setting["gsetting"][1]
             )
-        elif widget["type"] == "SpinButtonGSetting":
+        elif setting["type"] == "SpinButtonGSetting":
             return RtBaseWidgets.SpinButtonGSetting(
-                widget["name"],
-                widget["gsetting"][0],
-                widget["gsetting"][1],
-                widget["spinbutton_value_type"],
-                widget["spinbutton_min"],
-                widget["spinbutton_max"],
-                widget["spinbutton_step"],
-                widget["stepbutton_percentage"]
+                setting["name"],
+                setting["gsetting"][0],
+                setting["gsetting"][1],
+                setting["spinbutton_value_type"],
+                setting["spinbutton_min"],
+                setting["spinbutton_max"],
+                setting["spinbutton_step"],
+                setting["stepbutton_percentage"]
             )
-        elif widget["type"] == "ExtensionToggle":
+        elif setting["type"] == "ExtensionToggle":
             return RtBaseWidgets.ExtensionToggle(
-                widget["name"],
-                widget["extension"]
+                setting["name"],
+                setting["extension"]
             )
         else:
-            return get_custom_widget(widget)
+            return get_custom_widget(setting) # Tries to get a custom widget if it's not a base widget
     else:
-        print(widget)
+        print(setting)
         return RtBaseWidgets.Label("Error")
 
 
+# Same as get_base_widget but for custom widgets
 def get_custom_widget(setting):
     if "type" in setting:
         if setting["type"] == "RaiseWindowWhenFocused":
@@ -85,6 +91,7 @@ def get_custom_widget(setting):
         return RtBaseWidgets.Label("Error")
 
 
+# Sets visible for widget based on if dependent extension is installed.
 def check_for_dependent_extensions():
     setting = RtBaseWidgets.known_schemas["org.gnome.shell"]
     extensions = setting.get_strv("enabled-extensions")
@@ -92,6 +99,7 @@ def check_for_dependent_extensions():
         widget.set_visible(widget.requires_extension in extensions)
 
 
+# Runs extra function for widget if it needs one.
 def run_start_functions():
     for widget in needs_start_function:
         widget.start_function()

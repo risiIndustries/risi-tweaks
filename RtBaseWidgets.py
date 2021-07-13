@@ -1,6 +1,9 @@
-# All of the custom widgets we might need for risiTweaks are in this file.
-# Licensed Under LGPL3
+# All of the commonly used widgets we need for risiTweaks are in this file.
+# If contributing, I recommend looking at the Option, Toggle, and ToggleGSetting classes.
+# To learn how the code works.
+# Licensed Under GPL3
 # By PizzaLovingNerd
+
 import subprocess
 
 import gi
@@ -9,7 +12,8 @@ import RtUtils
 gi.require_version("Gtk", "3.0")
 from gi.repository import Gtk, Gio
 
-# For code optimization by avoiding duplicate classes
+# For code optimization by avoiding duplicate settings classes
+# Adds org.gnome.shell because the extension classes need it.
 known_schemas = {"org.gnome.shell": Gio.Settings.new("org.gnome.shell")}
 
 
@@ -78,53 +82,64 @@ class Toggle(Option):
 class ToggleGSetting(Toggle):
     def __init__(self, text, schema, key):
         Toggle.__init__(self, text)
+
+        # Creates a Gio.Setting with the schema if it doesn't already exist.
         if schema not in known_schemas:
             known_schemas[schema] = Gio.Settings.new(schema)
 
+        # Grabs the Gio.Setting
         self.setting = known_schemas[schema]
 
         self.switch.set_state(self.setting.get_boolean(key))
         self.switch.connect("state-set", self.state_set, key)
         self.setting.connect("changed", self.setting_changed, key)
 
+    # Sets the setting
     def state_set(self, switch, state, key):
         self.setting.set_boolean(key, state)
 
+    # Makes sure that the toggle updates if someone uses
+    # dconf editor or GNOME Tweaks to change a setting
     def setting_changed(self, setting, changed_key, key):
         if changed_key == key:
             new_value = self.setting.get_boolean(key)
-            old_value = self.switch.get_state()
-            if new_value != old_value:
+            if new_value != self.switch.get_state():
                 self.switch.set_state(new_value)
 
 
+# This is a switch to toggle an extension on and off.
 class ExtensionToggle(Toggle):
     def __init__(self, label, extension):
         Toggle.__init__(self, label)
         self.setting = known_schemas["org.gnome.shell"]
         self.extension = extension
-        self.extensionlist = self.setting.get_strv("enabled-extensions")
+        self.extension_list = self.setting.get_strv("enabled-extensions")
 
-        self.switch.set_state(extension in self.extensionlist)
+        self.switch.set_state(extension in self.extension_list)
 
         self.switch.connect("state-set", self.state_set)
         self.setting.connect("changed", self.setting_changed)
 
+    # Grabs the enabled extension list, adds or removes extension from the list
+    # And sets the "enabled-extensions" setting to enable or disable it.
     def state_set(self, switch, state):
-        self.extensionlist = self.setting.get_strv("enabled-extensions")
-        if state is True and self.extension not in self.extensionlist:
-            self.extensionlist.append(self.extension)
-        elif state is False and self.extension in self.extensionlist:
-            self.extensionlist.remove(self.extension)
-        self.setting.set_strv("enabled-extensions", self.extensionlist)
+        self.extension_list = self.setting.get_strv("enabled-extensions")
+        if state is True and self.extension not in self.extension_list:
+            self.extension_list.append(self.extension)
+        elif state is False and self.extension in self.extension_list:
+            self.extension_list.remove(self.extension)
+        self.setting.set_strv("enabled-extensions", self.extension_list)
 
+    # Makes sure that the toggle updates if someone uses
+    # dconf editor or GNOME Tweaks to change a setting
     def setting_changed(self, setting, key):
         if key == "enabled-extensions":
-            self.extensionlist = self.setting.get_strv("enabled-extensions")
-            if self.extension in self.extensionlist:
+            self.extension_list = self.setting.get_strv("enabled-extensions")
+            if self.extension in self.extension_list:
                 self.switch.set_state(True)
             else:
                 self.switch.set_state(False)
+
 
 # Dropdown Options
 class Dropdown(Option):
@@ -144,14 +159,19 @@ class DropdownGSetting(Dropdown):
             known_schemas[schema] = Gio.Settings.new(schema)
 
         self.setting = known_schemas[schema]
+
+        # Uses function for RtUtils if the menu options is a string
+        # This allows custom functions to be used inside a YAML file
         if isinstance(menu, str):
             menu = RtUtils.functions[menu]
 
         self.menu = menu
         self.case = case
 
-        for entry in self.menu:
+        for entry in self.menu:  # Adds items to dropdown
             self.dropdown.append_text(entry)
+
+        # Generates values that the dropdown is mapped to based on "self.case"
         if type(self.case) == list:
             for count, item in enumerate(self.case):
                 if item == self.case[count]:
@@ -191,6 +211,7 @@ class DropdownGSetting(Dropdown):
         self.dropdown.connect("changed", self.dropdown_changed, key, self.case)
         self.setting.connect("changed", self.setting_changed, key)
 
+    # Sets setting depending on the menu's case/mappings
     def dropdown_changed(self, dropdown, key, case):
         if type(self.case) == list:
             self.setting.set_string(
@@ -202,7 +223,8 @@ class DropdownGSetting(Dropdown):
         elif self.case == "same":
             self.setting.set_string(key, dropdown.get_active_text())
 
-
+    # Makes sure that the dropdown updates if someone uses
+    # dconf editor or GNOME Tweaks to change a setting
     def setting_changed(self, setting, changed_key, key):
         if changed_key == key:
             new_value = self.setting.get_string(key)
@@ -253,15 +275,17 @@ class FontGSetting(Font):
         self.font_button.connect("font-set", self.font_changed, key)
         self.setting.connect("changed", self.key_changed, key)
 
+    # Sets font gsetting
     def font_changed(self, font_button, key):
         self.setting.set_string(key, self.font_button.get_font())
 
+    # Makes sure that the font chooser updates if someone uses
+    # dconf editor or GNOME Tweaks to change a setting
     def key_changed(self, setting, key0, key1):
         if key0 == key1:
             new_value = self.setting.get_string(key0)
-            old_value = self.font_button.get_font()
-            if new_value != old_value:
-                self.font_button.set_font(self.setting.get_string(key0))
+            if new_value != self.font_button.get_font():
+                self.font_button.set_font(new_value)
 
 
 # SpinButton
@@ -282,6 +306,7 @@ class SpinButtonGSetting(SpinButton):
             self, text, schema, key, value_type,
             minint, maxint, step, percent
     ):
+        # Checks if it should be multiplied by 100
         if percent:
             SpinButton.__init__(self, text, minint * 100, maxint * 100, step * 100)
         else:
@@ -294,6 +319,7 @@ class SpinButtonGSetting(SpinButton):
         self.percent = percent
         self.value_type = value_type
 
+        # Get's the value type because it could be any of these 3 values
         if self.value_type == "int":
             self.value = self.setting.get_int(key)
         elif self.value_type == "uint":
@@ -305,14 +331,14 @@ class SpinButtonGSetting(SpinButton):
             self.value *= 100
         self.spin_button.set_value(self.value)
 
-
         self.spin_button.connect("value-changed", self.value_changed, key)
-        self.setting.connect("changed", self.changed, key)
+        self.setting.connect("changed", self.setting_changed, key)
 
+    # Sets gsetting based on if it's a percentage and the value type
     def value_changed(self, spinbutton, key):
         self.value = self.spin_button.get_value()
         if self.percent is True:
-            self.value *= 100
+            self.value /= 100
 
         if self.value_type == "int":
             self.setting.set_int(key, self.value)
@@ -321,7 +347,9 @@ class SpinButtonGSetting(SpinButton):
         elif self.value_type == "double":
             self.setting.set_double(key, self.value)
 
-    def changed(self, setting, key0, key1):
+    # Makes sure that the spin button updates if someone uses
+    # dconf editor or GNOME Tweaks to change a setting
+    def setting_changed(self, setting, key0, key1):
         if key0 == key1:
             if self.setting.get_double(key0) != self.spin_button.get_value():
                 if self.percent is False:
@@ -331,7 +359,8 @@ class SpinButtonGSetting(SpinButton):
                         self.setting.get_double(key0) * 100
                     )
 
-# Subprocess button
+
+# Subprocess button, used to run terminal commands with a button
 class SubprocessButton(Gtk.Button):
     def __init__(self, label, command):
         Gtk.Button.__init__(self)

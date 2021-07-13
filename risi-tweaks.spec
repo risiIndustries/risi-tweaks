@@ -27,22 +27,30 @@ rm -rf $RPM_BUILD_ROOT
 
 mkdir -p ${buildroot}/usr/bin/
 mkdir -p ${buildroot}/usr/lib/risi-tweaks/
+mkdir -p ${buildroot}/usr/share/applications/
 
 cp %{_builddir}/risi-tweaks/risi-tweaks %{buildroot}/usr/bin
-cp %{_builddir}/risi-tweaks/RtAppearance.py %{buildroot}/usr/lib/risi-tweaks
-cp %{_builddir}/risi-tweaks/RtMain.py %{buildroot}/usr/lib/risi-tweaks
-cp %{_builddir}/risi-tweaks/RtSettings.py %{buildroot}/usr/lib/risi-tweaks
+cp %{_builddir}/risi-tweaks/__main__.py %{buildroot}/usr/lib/risi-tweaks
+cp %{_builddir}/risi-tweaks/RtMainWindow.py %{buildroot}/usr/lib/risi-tweaks
+cp %{_builddir}/risi-tweaks/RtBaseWidgets.py %{buildroot}/usr/lib/risi-tweaks
+cp %{_builddir}/risi-tweaks/RtCustomWidgets.py %{buildroot}/usr/lib/risi-tweaks
+cp %{_builddir}/risi-tweaks/RtExtensionsWidgets.py %{buildroot}/usr/lib/risi-tweaks
+cp %{_builddir}/risi-tweaks/RtSettingsToWidget.py %{buildroot}/usr/lib/risi-tweaks
 cp %{_builddir}/risi-tweaks/RtUtils.py %{buildroot}/usr/lib/risi-tweaks
+cp -R %{_builddir}/risi-tweaks/tweaks %{buildroot}/usr/lib/risi-tweaks/tweaks
 
 %files
 # %license add-license-file-here
 # %doc add-docs-here
 /usr/bin/risi-tweaks
-/usr/lib/risi-tweaks/RtAppearance.py
-/usr/lib/risi-tweaks/RtMain.py
-/usr/lib/risi-tweaks/RtSettings.py
+/usr/lib/risi-tweaks/RtMainWindow.py
+/usr/lib/risi-tweaks/RtBaseWidgets.py
+/usr/lib/risi-tweaks/RtCustomWidgets.py
+/usr/lib/risi-tweaks/RtExtensionsWidgets.py
+/usr/lib/risi-tweaks/RtSettingsToWidget.py
 /usr/lib/risi-tweaks/RtUtils.py
+/usr/lib/risi-tweaks/tweaks/*
 
 %changelog
-* Thu Apr 29 2021 PizzaLovingNerd
-- First RPM
+* Tue Jul 13 2021 PizzaLovingNerd
+- First spec file
