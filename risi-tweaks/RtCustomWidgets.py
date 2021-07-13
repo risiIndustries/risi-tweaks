@@ -7,7 +7,7 @@ import gi
 import RtBaseWidgets
 
 gi.require_version("Gtk", "3.0")
-from gi.repository import Gtk, Gio
+
 
 # Used for the "Raise Window When Focused Setting"
 # Setting only shows up if the window focus mode is set to "sloppy"

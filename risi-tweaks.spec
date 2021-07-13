@@ -3,7 +3,7 @@ Version:        0.1
 Release:        1%{?dist}
 Summary:        risiOS's Tweak Tool
 
-License:        LGPL v3
+License:        GPL v3
 URL:            https://github.com/risiOS/risiTweaks
 Source0:        risi-tweaks-%{version}.tar.xz
 
