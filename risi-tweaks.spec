@@ -1,34 +1,56 @@
-Name: risi-tweaks
-Version: 0.1
-Release: 1%{?dist}
-Summary: risiOS's Tweak Tool
-License: GPL v3
-URL: https://github.com/risiOS/risiTweaks
-Source0: risi-tweaks-%{version}.tar.gz
-BuildArch: noarch
-Requires: python
-Requires: python3-gobject
-Requires: python3-yaml
+Name:           risi-tweaks
+Version:        0.1
+Release:        1%{?dist}
+Summary:        risiOS's Tweak Tool
+
+License:        GPL v3
+URL:            https://github.com/risiOS/risiTweaks
+Source0:        %{name}-%{version}.tar.gz
+
+BuildArch:	noarch
+
+BuildRequires:  python
+Requires:       python
+Requires:	python3-gobject, python3-yaml
 
 %description
 The tweak tool for risiOS. Full alternative to GNOME Tweaks
 
 %prep
-%setup -n %{name}-%{version} -n %{name}-%{version}
-# %setup -q
-
+%setup -q
 %build
-python setup.py build
-
 %install
-python setup.py install --single-verison-externally-managed -01 --root=$RPM_BUILD_ROOT --record=INSTALLED_FILES
-rm -rf $RPM_BUILD_ROOT/usr/lib/python3.9/site-packages/risi-tweaks/risiTweaks-0.1-py3.9.egg-info
+# rm -rf $RPM_BUILD_ROOT
 
-%clean
-rm -rf $RPM_BUILD_ROOT
+mkdir -p $RPM_BUILD_ROOT/usr/bin/
+mkdir -p $RPM_BUILD_ROOT%{_libdir}/risiOS/%{name}/tweaks
+mkdir -p $RPM_BUILD_ROOT/usr/share/applications/
 
-%files -f $RPM_BUILD_ROOT
-%defattr(-,root,root)
+cp %{_builddir}/%{name}-%{version}/%{name} %{buildroot}/usr/bin
+cp %{_builddir}/%{name}-%{version}/__main__.py %{buildroot}%{_libdir}/risiOS/%{name}
+cp %{_builddir}/%{name}-%{version}/__init__.py %{buildroot}%{_libdir}/risiOS/%{name}
+cp %{_builddir}/%{name}-%{version}/RtMainWindow.py %{buildroot}%{_libdir}/risiOS/%{name}
+cp %{_builddir}/%{name}-%{version}/RtBaseWidgets.py %{buildroot}%{_libdir}/risiOS/%{name}
+cp %{_builddir}/%{name}-%{version}/RtCustomWidgets.py %{buildroot}%{_libdir}/risiOS/%{name}
+cp %{_builddir}/%{name}-%{version}/RtExtensionWidgets.py %{buildroot}%{_libdir}/risiOS/%{name}
+cp %{_builddir}/%{name}-%{version}/RtSettingsToWidget.py %{buildroot}%{_libdir}/risiOS/%{name}
+cp %{_builddir}/%{name}-%{version}/RtUtils.py %{buildroot}%{_libdir}/risiOS/%{name}
+cp -R %{_builddir}/%{name}-%{version}/tweaks %{buildroot}%{_libdir}/risiOS/%{name}
+
+%files
+# %license add-license-file-here
+# %doc add-docs-here
+/usr/bin/%{name}
+%dir %{_libdir}/risiOS/%{name}/
+%{_libdir}/risiOS/%{name}/__main__.py
+%{_libdir}/risiOS/%{name}/__init__.py
+%{_libdir}/risiOS/%{name}/RtMainWindow.py
+%{_libdir}/risiOS/%{name}/RtBaseWidgets.py
+%{_libdir}/risiOS/%{name}/RtCustomWidgets.py
+%{_libdir}/risiOS/%{name}/RtExtensionWidgets.py
+%{_libdir}/risiOS/%{name}/RtSettingsToWidget.py
+%{_libdir}/risiOS/%{name}/RtUtils.py
+%{_libdir}/risiOS/%{name}/tweaks/*/*
 
 %changelog
 * Tue Jul 13 2021 PizzaLovingNerd
