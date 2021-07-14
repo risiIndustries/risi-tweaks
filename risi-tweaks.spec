@@ -26,30 +26,30 @@ The tweak tool for risiOS. Full alternative to GNOME Tweaks
 rm -rf $RPM_BUILD_ROOT
 
 mkdir -p ${buildroot}/usr/bin/
-mkdir -p ${buildroot}/usr/lib/risi-tweaks/
+mkdir -p ${buildroot}%{_libdir}/risi-tweaks/
 mkdir -p ${buildroot}/usr/share/applications/
 
 cp %{_builddir}/risi-tweaks/risi-tweaks %{buildroot}/usr/bin
-cp %{_builddir}/risi-tweaks/__main__.py %{buildroot}/usr/lib/risi-tweaks
-cp %{_builddir}/risi-tweaks/RtMainWindow.py %{buildroot}/usr/lib/risi-tweaks
-cp %{_builddir}/risi-tweaks/RtBaseWidgets.py %{buildroot}/usr/lib/risi-tweaks
-cp %{_builddir}/risi-tweaks/RtCustomWidgets.py %{buildroot}/usr/lib/risi-tweaks
-cp %{_builddir}/risi-tweaks/RtExtensionsWidgets.py %{buildroot}/usr/lib/risi-tweaks
-cp %{_builddir}/risi-tweaks/RtSettingsToWidget.py %{buildroot}/usr/lib/risi-tweaks
-cp %{_builddir}/risi-tweaks/RtUtils.py %{buildroot}/usr/lib/risi-tweaks
-cp -R %{_builddir}/risi-tweaks/tweaks %{buildroot}/usr/lib/risi-tweaks/tweaks
+cp %{_builddir}/risi-tweaks/__main__.py %{buildroot}%{_libdir}/risi-tweaks
+cp %{_builddir}/risi-tweaks/RtMainWindow.py %{buildroot}%{_libdir}/risi-tweaks
+cp %{_builddir}/risi-tweaks/RtBaseWidgets.py %{buildroot}%{_libdir}/risi-tweaks
+cp %{_builddir}/risi-tweaks/RtCustomWidgets.py %{buildroot}%{_libdir}/risi-tweaks
+cp %{_builddir}/risi-tweaks/RtExtensionsWidgets.py %{buildroot}%{_libdir}/risi-tweaks
+cp %{_builddir}/risi-tweaks/RtSettingsToWidget.py %{buildroot}%{_libdir}/risi-tweaks
+cp %{_builddir}/risi-tweaks/RtUtils.py %{buildroot}%{_libdir}/risi-tweaks
+cp -R %{_builddir}/risi-tweaks/tweaks %{buildroot}%{_libdir}/risi-tweaks/tweaks
 
 %files
 # %license add-license-file-here
 # %doc add-docs-here
 /usr/bin/risi-tweaks
-/usr/lib/risi-tweaks/RtMainWindow.py
-/usr/lib/risi-tweaks/RtBaseWidgets.py
-/usr/lib/risi-tweaks/RtCustomWidgets.py
-/usr/lib/risi-tweaks/RtExtensionsWidgets.py
-/usr/lib/risi-tweaks/RtSettingsToWidget.py
-/usr/lib/risi-tweaks/RtUtils.py
-/usr/lib/risi-tweaks/tweaks/*.yaml
+%{_libdir}/risi-tweaks/RtMainWindow.py
+%{_libdir}/risi-tweaks/RtBaseWidgets.py
+%{_libdir}/risi-tweaks/RtCustomWidgets.py
+%{_libdir}/risi-tweaks/RtExtensionsWidgets.py
+%{_libdir}/risi-tweaks/RtSettingsToWidget.py
+%{_libdir}/risi-tweaks/RtUtils.py
+%{_libdir}/risi-tweaks/tweaks/*.yaml
 
 %changelog
 * Tue Jul 13 2021 PizzaLovingNerd
