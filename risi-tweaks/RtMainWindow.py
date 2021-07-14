@@ -9,6 +9,7 @@ import yaml
 import RtBaseWidgets
 import RtExtensionWidgets
 import RtSettingsToWidget
+import pathlib
 
 gi.require_version("Gtk", "3.0")
 from gi.repository import Gtk
@@ -26,7 +27,7 @@ class RtMainWindow(Gtk.Window):
         self.window_stack = Gtk.Stack()
 
         # Finds every dir where yaml files could be stored
-        for dir in glob.glob(os.getcwd() + "/tweaks/*"):
+        for dir in glob.glob(str(pathlib.Path(__file__).parent.resolve()) + "/tweaks/*"):
 
             self.stack = Gtk.Stack()
             self.stackbox = Gtk.Box()
