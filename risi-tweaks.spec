@@ -49,7 +49,7 @@ cp -R %{_builddir}/risi-tweaks/tweaks %{buildroot}/usr/lib/risi-tweaks/tweaks
 /usr/lib/risi-tweaks/RtExtensionsWidgets.py
 /usr/lib/risi-tweaks/RtSettingsToWidget.py
 /usr/lib/risi-tweaks/RtUtils.py
-/usr/lib/risi-tweaks/tweaks/*
+/usr/lib/risi-tweaks/tweaks/*.yaml
 
 %changelog
 * Tue Jul 13 2021 PizzaLovingNerd
