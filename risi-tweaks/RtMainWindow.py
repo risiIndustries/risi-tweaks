@@ -16,10 +16,12 @@ from gi.repository import Gtk
 
 
 # Launchs main window of risiTweaks
-class RtMainWindow(Gtk.Window):
-    def __init__(self):
+class RtMainWindow(Gtk.ApplicationWindow):
+    def __init__(self, app):
         Gtk.Window.__init__(self, title="Risi Tweaks")
         self.set_default_size(-1, 500)
+        self.set_position(Gtk.WindowPosition.CENTER)
+        self.set_icon_name("io.risi.tweaks")
 
         # Creating the Header Bar and the two views for the Header Bar
         self.header = Gtk.HeaderBar()

@@ -8,7 +8,26 @@ from RtMainWindow import RtMainWindow
 gi.require_version("Gtk", "3.0")
 from gi.repository import Gtk
 
-if __name__ == '__main__':
-    window = RtMainWindow()
-    window.connect("delete-event", Gtk.main_quit)
-    Gtk.main()
+
+class Application(Gtk.Application):
+    def __init__(self):
+        Gtk.Application.__init__(
+            self,
+            application_id="io.risi.tweaks"
+        )
+        self.window = None
+
+    def do_activate(self):
+        if not self.window:
+            self.window = RtMainWindow(self)
+            self.add_window(self.window)
+            self.window.show_all()
+        self.window.present()
+
+    def on_quit(self, action, param):
+        self.quit()
+
+
+if __name__ == "__main__":
+    app = Application()
+    app.run()
