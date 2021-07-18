@@ -6,6 +6,10 @@
       name: "Workspaces Only on Primary Monitor"
       type: ToggleGSetting
       gsetting: [org.gnome.mutter, workspaces-only-on-primary]
+    - setting:
+      name: "Allow Audio Volume Above 100%"
+      type: ToggleGSetting
+      gsetting: [org.gnome.desktop.sound, allow-volume-above-100-percent]
 - section:
     name: "Bar"
     settings:
