@@ -15,10 +15,10 @@ gi.require_version("Gtk", "3.0")
 from gi.repository import Gtk
 
 
-# Launchs main window of risiTweaks
+# Launches main window of risiTweaks
 class RtMainWindow(Gtk.ApplicationWindow):
     def __init__(self, app):
-        Gtk.Window.__init__(self, title="Risi Tweaks")
+        Gtk.ApplicationWindow.__init__(self, title="Risi Tweaks")
         self.set_default_size(-1, 500)
         self.set_position(Gtk.WindowPosition.CENTER)
         self.set_icon_name("io.risi.tweaks")
