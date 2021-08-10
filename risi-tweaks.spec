@@ -26,16 +26,16 @@ mkdir -p $RPM_BUILD_ROOT/usr/bin/
 mkdir -p $RPM_BUILD_ROOT%{_libdir}/risiOS/%{name}/tweaks
 mkdir -p $RPM_BUILD_ROOT/usr/share/applications/
 
-cp %{_builddir}/%{name}-%{version}/%{name} %{buildroot}/usr/bin
-cp %{_builddir}/%{name}-%{version}/__main__.py %{buildroot}%{_libdir}/risiOS/%{name}
-cp %{_builddir}/%{name}-%{version}/__init__.py %{buildroot}%{_libdir}/risiOS/%{name}
-cp %{_builddir}/%{name}-%{version}/RtMainWindow.py %{buildroot}%{_libdir}/risiOS/%{name}
-cp %{_builddir}/%{name}-%{version}/RtBaseWidgets.py %{buildroot}%{_libdir}/risiOS/%{name}
-cp %{_builddir}/%{name}-%{version}/RtCustomWidgets.py %{buildroot}%{_libdir}/risiOS/%{name}
-cp %{_builddir}/%{name}-%{version}/RtExtensionWidgets.py %{buildroot}%{_libdir}/risiOS/%{name}
-cp %{_builddir}/%{name}-%{version}/RtSettingsToWidget.py %{buildroot}%{_libdir}/risiOS/%{name}
-cp %{_builddir}/%{name}-%{version}/RtUtils.py %{buildroot}%{_libdir}/risiOS/%{name}
-cp -R %{_builddir}/%{name}-%{version}/tweaks %{buildroot}%{_libdir}/risiOS/%{name}
+cp %{_builddir}/%{name}-%{version}/%{name}/risi-tweaks %{buildroot}/usr/bin
+cp %{_builddir}/%{name}-%{version}/%{name}/__main__.py %{buildroot}%{_libdir}/risiOS/%{name}
+cp %{_builddir}/%{name}-%{version}/%{name}/__init__.py %{buildroot}%{_libdir}/risiOS/%{name}
+cp %{_builddir}/%{name}-%{version}/%{name}/RtMainWindow.py %{buildroot}%{_libdir}/risiOS/%{name}
+cp %{_builddir}/%{name}-%{version}/%{name}/RtBaseWidgets.py %{buildroot}%{_libdir}/risiOS/%{name}
+cp %{_builddir}/%{name}-%{version}/%{name}/RtCustomWidgets.py %{buildroot}%{_libdir}/risiOS/%{name}
+cp %{_builddir}/%{name}-%{version}/%{name}/RtExtensionWidgets.py %{buildroot}%{_libdir}/risiOS/%{name}
+cp %{_builddir}/%{name}-%{version}/%{name}/RtSettingsToWidget.py %{buildroot}%{_libdir}/risiOS/%{name}
+cp %{_builddir}/%{name}-%{version}/%{name}/RtUtils.py %{buildroot}%{_libdir}/risiOS/%{name}
+cp -r %{_builddir}/%{name}-%{version}/%{name}/tweaks %{buildroot}%{_libdir}/risiOS/%{name}
 
 %files
 # %license add-license-file-here
