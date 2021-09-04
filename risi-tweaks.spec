@@ -20,11 +20,10 @@ The tweak tool for risiOS. Full alternative to GNOME Tweaks
 %setup -q
 %build
 %install
-# rm -rf $RPM_BUILD_ROOT
 
-mkdir -p $RPM_BUILD_ROOT/usr/bin/
-mkdir -p $RPM_BUILD_ROOT%{_libdir}/risiOS/%{name}/tweaks
-mkdir -p $RPM_BUILD_ROOT/usr/share/applications/
+mkdir -p %{buildroot}{_bindir}
+mkdir -p %{buildroot}%{_libdir}/risiOS/%{name}/tweaks
+mkdir -p %{buildroot}%{_datadir}/applications/
 
 cp %{_builddir}/%{name}-%{version}/%{name}/risi-tweaks %{buildroot}/usr/bin
 cp %{_builddir}/%{name}-%{version}/%{name}/__main__.py %{buildroot}%{_libdir}/risiOS/%{name}
