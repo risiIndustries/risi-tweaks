@@ -1,6 +1,6 @@
 Name:           risi-tweaks
 Version:        0.1
-Release:        3%{?dist}
+Release:        4%{?dist}
 Summary:        risiOS's Tweak Tool
 
 License:        GPL v3
@@ -25,7 +25,7 @@ mkdir -p %{buildroot}{_bindir}
 mkdir -p %{buildroot}%{_libdir}/risiOS/%{name}/tweaks
 mkdir -p %{buildroot}%{_datadir}/applications/
 
-cp %{_builddir}/%{name}-%{version}/%{name}/risi-tweaks %{buildroot}/usr/bin/%{name}
+cp %{_builddir}/%{name}-%{version}/%{name}/risi-tweaks %{buildroot}%{_bindir}/%{name}
 cp %{_builddir}/%{name}-%{version}/%{name}/__main__.py %{buildroot}%{_libdir}/risiOS/%{name}
 cp %{_builddir}/%{name}-%{version}/%{name}/__init__.py %{buildroot}%{_libdir}/risiOS/%{name}
 cp %{_builddir}/%{name}-%{version}/%{name}/RtMainWindow.py %{buildroot}%{_libdir}/risiOS/%{name}
@@ -39,8 +39,8 @@ cp -r %{_builddir}/%{name}-%{version}/%{name}/tweaks %{buildroot}%{_libdir}/risi
 %files
 # %license add-license-file-here
 # %doc add-docs-here
-/usr/bin/%{name}
 %dir %{_libdir}/risiOS/%{name}/
+%{_bindir}/%{name}
 %{_libdir}/risiOS/%{name}/__main__.py
 %{_libdir}/risiOS/%{name}/__init__.py
 %{_libdir}/risiOS/%{name}/RtMainWindow.py
