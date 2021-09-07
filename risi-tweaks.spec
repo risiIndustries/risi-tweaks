@@ -25,7 +25,7 @@ mkdir -p %{buildroot}{_bindir}
 mkdir -p %{buildroot}%{_libdir}/risiOS/%{name}/tweaks
 mkdir -p %{buildroot}%{_datadir}/applications/
 
-cp %{_builddir}/%{name}-%{version}/%{name}/risi-tweaks %{buildroot}/usr/bin
+cp %{_builddir}/%{name}-%{version}/%{name}/risi-tweaks %{buildroot}/usr/bin/%{name}
 cp %{_builddir}/%{name}-%{version}/%{name}/__main__.py %{buildroot}%{_libdir}/risiOS/%{name}
 cp %{_builddir}/%{name}-%{version}/%{name}/__init__.py %{buildroot}%{_libdir}/risiOS/%{name}
 cp %{_builddir}/%{name}-%{version}/%{name}/RtMainWindow.py %{buildroot}%{_libdir}/risiOS/%{name}
