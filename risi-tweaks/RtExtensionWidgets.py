@@ -38,8 +38,7 @@ class ExtensionTopItem(RtBaseWidgets.Option):
         # 6 = Initialized
         if self.extension["state"] != 1 and \
             self.extension["state"] != 2 and \
-            self.extension["state"] != 6:
-
+                self.extension["state"] != 6:
 
             if self.extension["state"] == 3:
                 self.indicator = Gtk.Image.new_from_icon_name("dialog-error", Gtk.IconSize.LARGE_TOOLBAR)
@@ -153,16 +152,16 @@ class ExtensionBottomItem(RtBaseWidgets.Option):
 
             if self.extension["state"] == 3:
                 self.error.set_markup(
-                    "Error: <b>An unknown error has occurred</b>"
+                    "<b>Error:</b> An unknown error has occurred."
                 )
             if self.extension["state"] == 4:
                 self.error.set_markup(
-                    "Error: <b>This extension is incompatible with your version of GNOME</b>"
+                    "<b>Error:</b>: This extension is incompatible with your version of GNOME."
                 )
 
             if self.extension["state"] == 5:
                 self.error.set_markup(
-                    "Error: <b>This extension is currently downloading.</b>"
+                    "<b>Error:</b>: This extension is currently downloading."
                 )
             self.add(self.error)
 
@@ -173,9 +172,8 @@ class ExtensionBottomItem(RtBaseWidgets.Option):
             self.description.set_margin_end(15)
             self.description.set_ellipsize(Pango.EllipsizeMode.END)
             self.description.set_markup(
-                "Description: <b>" +
+                "<b>Description:</b> " +
                 str(self.extension["description"]).replace("\n", " ")
-                + "</b>"
             )
             self.add(self.description)
 
@@ -186,9 +184,8 @@ class ExtensionBottomItem(RtBaseWidgets.Option):
             self.original_author.set_margin_end(15)
             self.original_author.set_ellipsize(Pango.EllipsizeMode.END)
             self.original_author.set_markup(
-                "Original Author: <b>" +
+                "<b>Original Author:</b> " +
                 str(self.extension["original-author"]).replace("\n", ", ")
-                + "</b>"
             )
             self.add(self.original_author)
 
@@ -196,7 +193,7 @@ class ExtensionBottomItem(RtBaseWidgets.Option):
         if "version" in self.extension:
             self.label = Gtk.Label(xalign=0)
             self.label.set_margin_start(15)
-            self.label.set_markup("Version: <b>" + str(self.extension["version"]) + "</b>")
+            self.label.set_markup("<b>Version: </b>" + str(self.extension["version"]))
             self.add(self.label)
         self.button_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
 
@@ -217,7 +214,8 @@ class ExtensionBottomItem(RtBaseWidgets.Option):
             self.remove_button.set_margin_start(10)
             self.remove_button.connect("clicked", self.remove_extension)
             self.button_box.add(self.remove_button)
-        if self.button_box.get_children() == []:
+
+        if not self.button_box.get_children():
             self.button_box.destroy()
         else:
             self.add(self.button_box)
@@ -231,7 +229,7 @@ class ExtensionBottomItem(RtBaseWidgets.Option):
 
         extension_proxy.remove_extension(self.extension["uuid"])
         extension_proxy.refresh()
-        self.props.parent.destroy()
+        self.props.parent.props.parent.props.parent.destroy()
         self.destroy()
 
 
@@ -254,30 +252,34 @@ class ExtensionItem(Gtk.Box):
 
 # Generates a list of extensions that can be put in a frame
 class ExtensionsList(Gtk.Box):
-    def __init__(self, extensions, exttype):
+    def __init__(self, all_extensions, filtered_extensions):
         Gtk.Box.__init__(self, orientation=Gtk.Orientation.VERTICAL)
-        for item in extensions:
-            if extensions[item]["type"] == exttype:
-                self.add(ExtensionItem(extensions[item]))
-                self.add(Gtk.Separator())
+        for ext in filtered_extensions:
+            self.add(ExtensionItem(all_extensions[ext]))
+            self.add(Gtk.Separator())
 
 
 # This generates the frames the extension lists go in.
 class ExtensionsFrames(Gtk.Box):
     def __init__(self):
         Gtk.Box.__init__(self, orientation=Gtk.Orientation.VERTICAL)
-        self.systemframe = RtBaseWidgets.Frame("Built-In Extensions") # Frame for built-in extensions
-        self.localframe = RtBaseWidgets.Frame("Manually Installed Extensions") # Frame for local extensions
-
         self.extensions = extension_proxy.extensions
 
-        self.systemframe.add(ExtensionsList(self.extensions, 1))  # Adds system installed extensions to system frame
-        self.localframe.add(ExtensionsList(self.extensions, 2))  # Adds locally installed extensions to system locally
+        # Gets system and locally installed extensions
+        self.systemExtensions = [ext for ext in self.extensions if self.extensions[ext]["type"] == 1]
+        self.localExtensions = [ext for ext in self.extensions if self.extensions[ext]["type"] == 2]
 
-        self.add(self.systemframe.label)
-        self.add(self.systemframe)
-        self.add(self.localframe.label)
-        self.add(self.localframe)
+        if self.systemExtensions:
+            self.systemFrame = RtBaseWidgets.Frame("Built-In Extensions") # Frame for built-in extensions
+            self.systemFrame.add(ExtensionsList(self.extensions, self.systemExtensions))  # Adds system installed extensions to system frame
+            self.add(self.systemFrame.label)
+            self.add(self.systemFrame)
+
+        if self.localExtensions:
+            self.localFrame = RtBaseWidgets.Frame("Manually Installed Extensions") # Frame for local extensions
+            self.localFrame.add(ExtensionsList(self.extensions, self.localExtensions))  # Adds locally installed extensions to system locally
+            self.add(self.localFrame.label)
+            self.add(self.localFrame)
 
 
 # This is the class for the extensions page that is put inside the main window
@@ -336,7 +338,7 @@ class ExtensionsPage(Gtk.Box):
         self.set_margin_top(10)
         self.set_margin_bottom(10)
 
-    # Refreshes extensions if an extension is enabled
+    # Refreshes extensions if an extension is enabled or disabled
     def setting_changed(self, setting, key):
         if key == "enabled-extensions":
             self.refresh_extensions(None)
@@ -349,6 +351,7 @@ class ExtensionsPage(Gtk.Box):
         self.extension_frames = ExtensionsFrames()
         self.add(self.extension_frames)
         self.extension_frames.show_all()
+
 
 # Button for launching websites
 def launch_website(button, url):
