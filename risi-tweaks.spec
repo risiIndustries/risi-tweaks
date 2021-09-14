@@ -12,6 +12,7 @@ BuildArch:	noarch
 BuildRequires:  python
 Requires:       python
 Requires:	python3-gobject, python3-yaml
+Requires:	risi-adwaita-recolor
 
 %description
 The tweak tool for risiOS. Full alternative to GNOME Tweaks

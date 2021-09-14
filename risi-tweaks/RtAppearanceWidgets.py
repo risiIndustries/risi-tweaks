@@ -11,105 +11,102 @@ gi.require_version("Gdk", "3.0")
 from gi.repository import Gtk, Gdk
 
 risiColors = {
-    "Adwaita": ["#3584e4", "#15539e"],
-    "Adwaita-green": ["#2ec27e", "#1a7048"],
-    "Adwaita-orange": ["#ff7800", "#994800"],
-    "Adwaita-pink": ["#ff00c7", "#990077"],
-    "Adwaita-purple": ["#9141ac", "#532562"],
-    "Adwaita-red": ["#ed333b", "#ab0f16"],
-    "Adwaita-brown": ["#986a44", "#523924"]
+    "Adwaita": "#3584e4",
+    "Adwaita-green": "#2ec27e",
+    "Adwaita-orange": "#ff7800",
+    "Adwaita-pink": "#ff00c7",
+    "Adwaita-purple": "#9141ac",
+    "Adwaita-red": "#ed333b",
+    "Adwaita-brown": "#986a44"
 }
 risiThemes = list(risiColors.keys())
 for risicolor in risiThemes.copy():
     risiThemes.append(risicolor + "-dark")
 
 
-class ThemeSelectionWidget(Gtk.Box):
+class ThemeSelectionWidget(Gtk.Revealer):
     def __init__(self):
-        Gtk.Box.__init__(self, orientation=Gtk.Orientation.HORIZONTAL)
-        self.set_vexpand(False)
-
-        # self.stackswitcher = Gtk.StackSwitcher()
-        # self.stack = Gtk.Stack()
-
-        self.add(AccentFlowBox(risiColors, 0))
-        # self.add(self.stackswitcher)
-
-
-class OfficialThemePage(Gtk.Box):
-    def __init__(self):
-        Gtk.Box.__init__(self, orientation=Gtk.Orientation.HORIZONTAL)
-        self.set_vexpand(False)
-
-        self.colorint = 0
-        self.setting = RtBaseWidgets.known_schemas["org.gnome.desktop.interface"]
-        #self.setting.get_string("gtk-theme") in risiThemes and self.setting.get_string("gtk-theme").endswith("-dark")
-
-
-class AccentFlowBox(Gtk.ScrolledWindow):
-    def __init__(self, colors, colorint):
-        Gtk.ScrolledWindow.__init__(self)
-        self.colors = colors
-        self.set_policy(
-            Gtk.PolicyType.AUTOMATIC,
-            Gtk.PolicyType.NEVER
-        )
-        self.set_hexpand(True)
-        self.set_vexpand(False)
+        Gtk.Revealer.__init__(self)
 
         self.setting = RtBaseWidgets.known_schemas["org.gnome.desktop.interface"]
-
-        self.flowbox = Gtk.FlowBox()
-        self.flowbox.set_margin_start(10)
-        self.flowbox.set_margin_end(10)
-        self.flowbox.set_margin_top(10)
-        self.flowbox.set_margin_bottom(10)
-        for color in self.colors:
-            self.flowbox.add(AccentButton(colors[color][colorint]))
-
-        self.flowbox.connect("child-activated", self.child_activated)
         self.setting.connect("changed", self.setting_changed)
 
-        self.add(self.flowbox)
+        self.set_reveal_child(self.setting.get_string("gtk-theme") in risiThemes)
+
+        self.set_vexpand(False)
+        self.box = Gtk.Box()
+
+        #self.box.add(DarkModeToggle)
+        self.box.add(AccentFlowBox(risiColors))
+        self.add(self.box)
+        
+    def setting_changed(self, setting, key):
+        if key == "gtk-theme":
+            self.set_reveal_child(self.setting.get_string("gtk-theme") in risiThemes)
+
+
+class AccentFlowBox(Gtk.FlowBox):
+    def __init__(self, colors):
+        Gtk.FlowBox.__init__(self)
+        self.colors = colors
+        self.set_hexpand(True)
+        self.set_vexpand(False)
+        self.set_valign(Gtk.Align.START)
+        self.setting = RtBaseWidgets.known_schemas["org.gnome.desktop.interface"]
+
+        self.set_margin_top(10)
+        self.set_margin_bottom(10)
+        for color in self.colors:
+            self.add(AccentButton(colors[color]))
+            
+        self.setting.get_string("gtk-theme")
+
+        self.connect("selected-children-changed", self.child_activated)
+        self.setting.connect("changed", self.setting_changed)
+
+        if self.setting.get_string("gtk-theme") in risiThemes and self.setting.get_string("gtk-theme").endswith("-dark"):
+            self.select_child(
+                self.get_child_at_index(
+                    list(self.colors.keys()).index(self.setting.get_string("gtk-theme")[:-5])
+                )
+            )
+        elif self.setting.get_string("gtk-theme") in risiThemes:
+            self.select_child(
+                self.get_child_at_index(
+                    list(self.colors.keys()).index(self.setting.get_string("gtk-theme"))
+                )
+            )
 
     def setting_changed(self, setting, key):
-        if key == "org.gnome.desktop.interface":
+        if key == "gtk-theme":
             if self.setting.get_string("gtk-theme") in risiThemes and self.setting.get_string("gtk-theme").endswith("-dark"):
-                # if self.flowbox.get_selected_children()[0] == self.flowbox.get_child_at_index(
-                #         self.colors.index(self.setting.get_string("gtk-theme")[len(self.setting.get_string("gtk-theme")) - 5])
-                # ):
-                self.flowbox.select_child(
-                    self.flowbox.get_child_at_index(
-                        self.colors.keys.index(self.setting.get_string("gtk-theme")[len(self.setting.get_string("gtk-theme")) - 5])
+                self.select_child(
+                    self.get_child_at_index(
+                        list(self.colors.keys()).index(self.setting.get_string("gtk-theme")[:-5])
                     )
                 )
             elif self.setting.get_string("gtk-theme") in risiThemes:
-                # if self.flowbox.get_selected_children()[0] == self.flowbox.get_child_at_index(
-                #         self.colors.index(self.setting.get_string("gtk-theme"))
-                # ):
-                self.flowbox.select_child(
-                    self.flowbox.get_child_at_index(
-                        self.colors.keys.index(self.setting.get_string("gtk-theme"))
+                self.select_child(
+                    self.get_child_at_index(
+                        list(self.colors.keys()).index(self.setting.get_string("gtk-theme"))
                     )
                 )
 
-    def child_activated(self, flowbox, child):
+    def child_activated(self, flowbox):
         if self.setting.get_string("gtk-theme") in risiThemes and self.setting.get_string("gtk-theme").endswith("-dark"):
             self.setting.set_string(
                 "gtk-theme",
                 list(self.colors.keys())[
-                    self.flowbox.get_selected_children()[0].get_index()
+                    self.get_selected_children()[0].get_index()
                 ] + "-dark"
             )
         elif self.setting.get_string("gtk-theme") in risiThemes:
-            print(list(self.colors.keys()))
             self.setting.set_string(
                 "gtk-theme",
                 list(self.colors.keys())[
-                    self.flowbox.get_selected_children()[0].get_index()
+                    self.get_selected_children()[0].get_index()
                 ]
             )
-
 
 
 class AccentButton(Gtk.DrawingArea):
@@ -122,7 +119,8 @@ class AccentButton(Gtk.DrawingArea):
         self.set_margin_end(10)
         self.set_margin_top(10)
         self.set_margin_bottom(10)
-        self.set_size_request(8, 8)
+        self.set_valign(Gtk.Align.START)
+        self.set_size_request(16, 32)
         self.connect("draw", on_draw, {"color": self.rgba})
 
 
