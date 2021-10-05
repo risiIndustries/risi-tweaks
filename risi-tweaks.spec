@@ -4,7 +4,7 @@ Release:        4%{?dist}
 Summary:        risiOS's Tweak Tool
 
 License:        GPL v3
-URL:            https://github.com/risiOS/risiTweaks
+URL:            https://github.com/risiOS/risi-tweaks
 Source0:        %{name}-%{version}.tar.gz
 
 BuildArch:	noarch
