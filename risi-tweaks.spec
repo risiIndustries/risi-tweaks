@@ -33,7 +33,7 @@ install -m 644 %{name}/risi-tweaks %{buildroot}%{_libdir}/risiOS/%{name}
 %files
 # %license add-license-file-here
 # %doc add-docs-here
-%dir %{_libdir}/risiOS/%{name}/
+%dir %{_libdir}/risiOS/%{name}
 %{_bindir}/%{name}
 
 %changelog
