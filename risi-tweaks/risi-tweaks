@@ -1,2 +1,2 @@
 #!/usr/bin/bash
-python3 /usr/lib/risiOS/risi-tweaks/__main__.py
+python3 /usr/lib64/risiOS/risi-tweaks/__main__.py
