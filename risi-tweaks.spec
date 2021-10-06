@@ -27,8 +27,8 @@ mkdir -p %{buildroot}%{_bindir}
 mkdir -p %{buildroot}%{_libdir}/risiOS/%{name}/tweaks
 mkdir -p %{buildroot}%{_datadir}/applications/
 
-cp -a %{name}/risi-tweaks %{buildroot}%{_bindir}/%{name}
-install -m 644 %{name} %{buildroot}%{_libdir}/risiOS/%{name}
+cp -a %{name} %{buildroot}%{_bindir}/%{name}
+install -m 644 %{name}/risi-tweaks %{buildroot}%{_libdir}/risiOS/%{name}
 
 %files
 # %license add-license-file-here
