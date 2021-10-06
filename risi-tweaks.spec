@@ -27,22 +27,14 @@ mkdir -p %{buildroot}%{_bindir}
 mkdir -p %{buildroot}%{_libdir}/risiOS/%{name}/tweaks
 mkdir -p %{buildroot}%{_datadir}/applications/
 
-install -m 755 %{name}/risi-tweaks %{buildroot}%{_bindir}/%{name}
+cp -a %{name}/risi-tweaks %{buildroot}%{_bindir}/%{name}
 install -m 644 %{name} %{buildroot}%{_libdir}/risiOS/%{name}
+
 %files
 # %license add-license-file-here
 # %doc add-docs-here
 %dir %{_libdir}/risiOS/%{name}/
 %{_bindir}/%{name}
-%{_libdir}/risiOS/%{name}/__main__.py
-%{_libdir}/risiOS/%{name}/__init__.py
-%{_libdir}/risiOS/%{name}/RtMainWindow.py
-%{_libdir}/risiOS/%{name}/RtBaseWidgets.py
-%{_libdir}/risiOS/%{name}/RtCustomWidgets.py
-%{_libdir}/risiOS/%{name}/RtExtensionWidgets.py
-%{_libdir}/risiOS/%{name}/RtSettingsToWidget.py
-%{_libdir}/risiOS/%{name}/RtUtils.py
-%{_libdir}/risiOS/%{name}/tweaks/*/*
 
 %changelog
 * Tue Jul 13 2021 PizzaLovingNerd
