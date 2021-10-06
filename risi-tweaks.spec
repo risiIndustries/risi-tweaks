@@ -23,7 +23,7 @@ The tweak tool for risiOS. Full alternative to GNOME Tweaks
 %build
 %install
 
-mkdir -p %{buildroot}{_bindir}
+mkdir -p %{buildroot}%{_bindir}
 mkdir -p %{buildroot}%{_libdir}/risiOS/%{name}/tweaks
 mkdir -p %{buildroot}%{_datadir}/applications/
 
