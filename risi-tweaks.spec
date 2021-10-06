@@ -18,7 +18,8 @@ Requires:	risi-adwaita-recolor
 The tweak tool for risiOS. Full alternative to GNOME Tweaks
 
 %prep
-%setup -q
+%autosetup
+
 %build
 %install
 
