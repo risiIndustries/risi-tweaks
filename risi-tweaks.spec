@@ -47,7 +47,7 @@ install -m 644 %{name}/%{name} %{buildroot}%{_bindir}
 %{_libdir}/risiOS/%{name}/risi-tweaks
 %{_libdir}/risiOS/%{name}/tweaks/UI/Appearance.yaml
 %{_libdir}/risiOS/%{name}/tweaks/UI/Layout.yaml
-%{_libdir}/risiOS/%{name}/tweaks/UI/MouseAndKeyboard.yaml
+%{_libdir}/risiOS/%{name}/tweaks/UI/Mouse\ And\ Keyboard.yaml
 %{_libdir}/risiOS/%{name}/tweaks/UI/Windows.yaml
 
 %changelog
