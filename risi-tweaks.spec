@@ -45,10 +45,7 @@ install -m 644 %{name}/%{name} %{buildroot}%{_bindir}
 %{_libdir}/risiOS/%{name}/__init__.py
 %{_libdir}/risiOS/%{name}/__main__.py
 %{_libdir}/risiOS/%{name}/risi-tweaks
-%{_libdir}/risiOS/%{name}/tweaks/UI/Appearance.yaml
-%{_libdir}/risiOS/%{name}/tweaks/UI/Layout.yaml
-%{_libdir}/risiOS/%{name}/tweaks/UI/Mouse\ And\ Keyboard.yaml
-%{_libdir}/risiOS/%{name}/tweaks/UI/Windows.yaml
+%{_libdir}/risiOS/%{name}/*/*
 
 %changelog
 * Tue Jul 13 2021 PizzaLovingNerd
