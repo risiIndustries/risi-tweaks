@@ -1,6 +1,6 @@
 Name:           risi-tweaks
 Version:        0.1
-Release:        6%{?dist}
+Release:        7%{?dist}
 Summary:        risiOS's Tweak Tool
 
 License:        GPL v3
@@ -28,7 +28,7 @@ mkdir -p %{buildroot}%{_libdir}/risiOS/%{name}/tweaks
 mkdir -p %{buildroot}%{_datadir}/applications/
 
 cp -a %{name} %{buildroot}%{_libdir}/risiOS/
-install -m 0644 %{name}/%{name} %{buildroot}%{_bindir}
+install -m 755 %{name}/%{name} %{buildroot}%{_bindir}
 
 %files
 # %license add-license-file-here
