@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=risiTweaks
+Comment=Tweak advanced risiOS settings
+Icon=io.risi.Tweaks
+Exec=risi-tweaks
+Terminal=false
+Type=Application
+Categories=GNOME;GTK;Utility;
+Keywords=Settings;Advanced;Preferences;Extensions;Fonts;Theme;XKB;Keyboard;Typing;risi;risiOS;Tweaks;
+OnlyShowIn=GNOME;Unity;Pantheon;
