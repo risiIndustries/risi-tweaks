@@ -13,8 +13,12 @@ gi.require_version("Gtk", "3.0")
 from gi.repository import Gtk, Gio
 
 # For code optimization by avoiding duplicate settings classes
-# Adds org.gnome.shell because the extension classes need it.
-known_schemas = {"org.gnome.shell": Gio.Settings.new("org.gnome.shell")}
+# Adds org.gnome.shell because the extension classes need it and
+# org.gnome.desktop.interface for accent colors.
+known_schemas = {
+    "org.gnome.shell": Gio.Settings.new("org.gnome.shell"),
+    "org.gnome.desktop.interface": Gio.Settings.new("org.gnome.desktop.interface")
+}
 
 
 # Frame Container (Thanks PizzaMartijn)
