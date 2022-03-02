@@ -28,8 +28,8 @@ mkdir -p %{buildroot}%{_libdir}/risiOS/%{name}/tweaks
 mkdir -p %{buildroot}%{_datadir}/applications/
 
 cp -a %{name} %{buildroot}%{_libdir}/risiOS/
-cp io.risi.Tweaks.desktop %{_datadir}/applications/io.risi.Tweaks.desktop
-cp io.risi.Tweaks.svg %{_datadir}/icons/hicolor/scalable/apps/io.risi.Tweaks.svg
+cp io.risi.Tweaks.desktop %{buildroot}%{_datadir}/applications/io.risi.Tweaks.desktop
+cp io.risi.Tweaks.svg %{buildroot}%{_datadir}/icons/hicolor/scalable/apps/io.risi.Tweaks.svg
 install -m 755 %{name}/%{name} %{buildroot}%{_bindir}
 
 %files
