@@ -5,7 +5,7 @@ Summary:        risiOS's Tweak Tool
 
 License:        GPL v3
 URL:            https://github.com/risiOS/risi-tweaks
-Source0:        %{name}-%{version}.tar.gz
+Source0:        https://github.com/risiOS/risi-tweaks/archive/refs/heads/main.tar.gz
 
 BuildArch:	noarch
 
@@ -18,7 +18,7 @@ Requires:	risi-adwaita-recolor
 The tweak tool for risiOS. Full alternative to GNOME Tweaks
 
 %prep
-%autosetup
+%autosetup -n %{name}-main
 
 %build
 %install
