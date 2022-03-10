@@ -16,9 +16,6 @@
       dropdown_options: gtk-themes
       dropdown_keys: same
     - setting:
-      name: "Application Theme (GTK Only)"
-      type: ThemeSelectionWidget
-    - setting:
       name: "Icon Theme"
       type: DropdownGSetting
       gsetting: [org.gnome.desktop.interface, icon-theme]
