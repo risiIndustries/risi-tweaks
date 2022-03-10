@@ -4,7 +4,6 @@
 
 import RtBaseWidgets
 import RtCustomWidgets
-import RtAppearanceWidgets
 import gi
 
 gi.require_version("Gtk", "3.0")
@@ -83,9 +82,6 @@ def get_custom_widget(setting):
         if setting["type"] == "RaiseWindowWhenFocused":
             widget = RtCustomWidgets.RaiseWindowWhenFocused()
             needs_start_function.append(widget)
-            return widget
-        if setting["type"] == "ThemeSelectionWidget":
-            widget = RtAppearanceWidgets.ThemeSelectionWidget()
             return widget
         else:
             print(setting)
