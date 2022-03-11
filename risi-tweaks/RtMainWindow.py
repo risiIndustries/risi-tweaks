@@ -8,6 +8,7 @@ import glob
 import yaml
 import RtBaseWidgets
 import RtExtensionWidgets
+import RtRisiScript
 import RtSettingsToWidget
 import pathlib
 
@@ -79,6 +80,13 @@ class RtMainWindow(Gtk.ApplicationWindow):
         self.extension_scroll.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC)
         self.extension_scroll.add(RtExtensionWidgets.ExtensionsPage())
         self.window_stack.add_titled(self.extension_scroll, "extensions", "Extensions")
+
+        # Adds risi script catagory to the main windows stack
+        self.risiscript_scroll = Gtk.ScrolledWindow()
+        self.risiscript_scroll.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC)
+        self.risiscript_scroll.add(RtRisiScript.RisiScriptPage())
+        self.window_stack.add_titled(self.risiscript_scroll, "risiscript", "risiScript")
+
 
         # Adds catagory stack pages to title bar
         self.stack_switcher = Gtk.StackSwitcher(stack=self.window_stack)
