@@ -21,7 +21,7 @@ class Application(Gtk.Application):
         if not self.window:
             self.window = RtMainWindow(self)
             self.window.set_title("risiTweaks")
-            self.window.set_icon_from_file("/usr/share/icons/hicolor/scalable/apps/io.risi.Tweaks.svg")
+            self.window.set_icon_name("webapp-manager")
             self.add_window(self.window)
             self.window.show_all()
         self.window.present()
