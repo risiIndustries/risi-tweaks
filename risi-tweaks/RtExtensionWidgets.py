@@ -13,6 +13,13 @@ from gi.repository import Gtk, Gdk, Pango
 
 extension_proxy = RtUtils.ExtensionProxy()
 
+default_extensions = [
+    "appindicatorsupport@rgcjonas.gmail.com",
+	"drive-menu@gnome-shell-extensions.gcampax.github.com",
+	"dock-from-dash@fthx",
+	"risiGNOME@risi.io",
+	"sound-output-device-chooser@kgshank.net"
+]
 
 # This is where the extension name, settings button,
 # toggle switch, reveal button, and error indicator go
@@ -74,6 +81,7 @@ class ExtensionTopItem(RtBaseWidgets.Option):
         self.switch.set_margin_end(10)
         self.switch.set_sensitive(self.sensitive)
         self.switch.set_state(self.extension["uuid"] in self.extension_enabled)
+        self.switch.set_sensitive(not self.extension["uuid"] == "risiGNOME@risi.io")
         self.add(self.switch)
 
         # Button to reveal bottom of ExtensionItem
@@ -266,8 +274,27 @@ class ExtensionsFrames(Gtk.Box):
         self.extensions = extension_proxy.extensions
 
         # Gets system and locally installed extensions
-        self.systemExtensions = [ext for ext in self.extensions if self.extensions[ext]["type"] == 1]
-        self.localExtensions = [ext for ext in self.extensions if self.extensions[ext]["type"] == 2]
+
+        self.defaultExtensions = [
+            ext for ext in self.extensions
+            if self.extensions[ext]["uuid"] in default_extensions
+        ]
+        self.systemExtensions = [
+            ext for ext in self.extensions
+            if self.extensions[ext]["type"] == 1
+            and self.extensions[ext]["uuid"] not in default_extensions
+        ]
+        self.localExtensions = [
+            ext for ext in self.extensions
+            if self.extensions[ext]["type"] == 2
+            and self.extensions[ext]["uuid"] not in default_extensions
+        ]
+
+        if self.defaultExtensions:
+            self.defaultFrame = RtBaseWidgets.Frame("Default Extensions") # Frame for built-in extensions
+            self.defaultFrame.add(ExtensionsList(self.extensions, self.defaultExtensions))  # Adds system installed extensions to system frame
+            self.add(self.defaultFrame.label)
+            self.add(self.defaultFrame)
 
         if self.systemExtensions:
             self.systemFrame = RtBaseWidgets.Frame("Built-In Extensions") # Frame for built-in extensions

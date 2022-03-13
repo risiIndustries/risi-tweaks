@@ -1,6 +1,6 @@
 Name:           risi-tweaks
 Version:        0.1
-Release:        8%{?dist}
+Release:        9%{?dist}
 Summary:        risiOS's Tweak Tool
 
 License:        GPL v3
@@ -26,7 +26,8 @@ The tweak tool for risiOS. Full alternative to GNOME Tweaks
 mkdir -p %{buildroot}%{_bindir}
 mkdir -p %{buildroot}%{_libdir}/risiOS/%{name}/tweaks
 mkdir -p %{buildroot}%{_datadir}/icons/hicolor/scalable/apps
-mkdir -p %{buildroot}%{_datadir}/applications/
+mkdir -p %{buildroot}%{_datadir}/applications
+mkdir -p %{buildroot}%{_datadir}/risiOS/scripts
 
 cp -a %{name} %{buildroot}%{_libdir}/risiOS/
 cp io.risi.Tweaks.desktop %{buildroot}%{_datadir}/applications/io.risi.Tweaks.desktop
@@ -40,7 +41,7 @@ install -m 755 %{name}/%{name} %{buildroot}%{_bindir}
 %{_datadir}/applications/io.risi.Tweaks.desktop
 %{_datadir}/icons/hicolor/scalable/apps/io.risi.Tweaks.svg
 %{_bindir}/%{name}
-%{_libdir}/risiOS/%{name}/RtAppearanceWidgets.py
+%{_libdir}/risiOS/%{name}/RtRisiScript.py
 %{_libdir}/risiOS/%{name}/RtBaseWidgets.py
 %{_libdir}/risiOS/%{name}/RtCustomWidgets.py
 %{_libdir}/risiOS/%{name}/RtExtensionWidgets.py
