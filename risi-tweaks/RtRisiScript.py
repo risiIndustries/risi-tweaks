@@ -5,9 +5,6 @@ import yaml
 import gi
 import risiscript
 
-import RtUtils
-import RtBaseWidgets
-
 from enum import Enum
 
 gi.require_version("Gtk", "3.0")
@@ -155,7 +152,7 @@ class RisiScriptStackPage(Gtk.Box):
 
 
     def launch_risi_script(self, button):
-        procargs = ["risi-script-gtk", self.script.location]
+        procargs = ["risi-script-gtk", "--file", self.script.location]
         if self.trusted:
             procargs.append("--trusted")
         subprocess.Popen(procargs)

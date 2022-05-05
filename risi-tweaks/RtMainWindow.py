@@ -10,6 +10,7 @@ import RtBaseWidgets
 import RtExtensionWidgets
 import RtRisiScript
 import RtSettingsToWidget
+import RtExperimentsWidgets
 import pathlib
 
 gi.require_version("Gtk", "3.0")
@@ -81,12 +82,17 @@ class RtMainWindow(Gtk.ApplicationWindow):
         self.extension_scroll.add(RtExtensionWidgets.ExtensionsPage())
         self.window_stack.add_titled(self.extension_scroll, "extensions", "Extensions")
 
-        # Adds risi script catagory to the main windows stack
+        # Adds risi script category to the main windows stack
         self.risiscript_scroll = Gtk.ScrolledWindow()
         self.risiscript_scroll.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC)
         self.risiscript_scroll.add(RtRisiScript.RisiScriptPage())
         self.window_stack.add_titled(self.risiscript_scroll, "risiscript", "risiScript")
 
+        # Adds experiments to the main windows stack
+        self.experiments_scroll = Gtk.ScrolledWindow()
+        self.experiments_scroll.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC)
+        self.experiments_scroll.add(RtExperimentsWidgets.ExperimentsPage())
+        self.window_stack.add_titled(self.risiscript_scroll, "risiscript", "risiScript")
 
         # Adds catagory stack pages to title bar
         self.stack_switcher = Gtk.StackSwitcher(stack=self.window_stack)

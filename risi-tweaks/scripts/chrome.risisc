@@ -1,0 +1,26 @@
+#!/bin/risiscript
+metadata:
+  name: "Chrome"
+  id: "io.risi.chromeinstaller"
+  description: "Installs the popular browser from Google.\nWARNING: Chrome is very bad for your privacy"
+  dependencies: None
+  root: True
+  one_time_use: True
+  risiscript_version: 1.0
+  reboot: False
+
+install:
+  bash: |
+    dnf install https://dl.google.com/linux/direct/google-chrome-stable_current_x86_64.rpm
+  checks:
+    - COMMANDOUTPUTCONTAINS:
+      - "rpm -q google-chrome-stable && echo installed || echo uninstalled"
+      - "installed"
+
+remove:
+  bash: |
+    dnf remove google-chrome-stable
+  checks:
+    - COMMANDOUTPUTCONTAINS:
+        - "rpm -q google-chrome-stable && echo installed || echo uninstalled"
+        - "uninstalled"
