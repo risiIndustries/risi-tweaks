@@ -41,13 +41,7 @@ install -m 755 %{name}/%{name} %{buildroot}%{_bindir}
 %{_datadir}/applications/io.risi.Tweaks.desktop
 %{_datadir}/icons/hicolor/scalable/apps/io.risi.Tweaks.svg
 %{_bindir}/%{name}
-%{_libdir}/risiOS/%{name}/RtRisiScript.py
-%{_libdir}/risiOS/%{name}/RtBaseWidgets.py
-%{_libdir}/risiOS/%{name}/RtCustomWidgets.py
-%{_libdir}/risiOS/%{name}/RtExtensionWidgets.py
-%{_libdir}/risiOS/%{name}/RtMainWindow.py
-%{_libdir}/risiOS/%{name}/RtSettingsToWidget.py
-%{_libdir}/risiOS/%{name}/RtUtils.py
+%{_libdir}/risiOS/%{name}/Rt*.py
 %{_libdir}/risiOS/%{name}/__init__.py
 %{_libdir}/risiOS/%{name}/__main__.py
 %{_libdir}/risiOS/%{name}/risi-tweaks
