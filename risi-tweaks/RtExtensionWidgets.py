@@ -136,7 +136,7 @@ class ExtensionTopItem(RtBaseWidgets.Option):
 class ExtensionBottomItem(RtBaseWidgets.Option):
     def __init__(self, extension):
         self.setting = RtBaseWidgets.known_schemas["org.gnome.shell"]
-        Gtk.Box.__init__(self, extension, orientation=Gtk.Orientation.VERTICAL)
+        Gtk.Box.__init__(self, orientation=Gtk.Orientation.VERTICAL)
         self.set_homogeneous(False)
         self.set_spacing(7)
         self.extension = extension
@@ -378,7 +378,6 @@ class ExtensionsPage(Gtk.Box):
         self.extension_frames = ExtensionsFrames()
         self.add(self.extension_frames)
         self.extension_frames.show_all()
-
 
 # Button for launching websites
 def launch_website(button, url):

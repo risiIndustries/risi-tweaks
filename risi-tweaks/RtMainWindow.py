@@ -91,8 +91,8 @@ class RtMainWindow(Gtk.ApplicationWindow):
         # Adds experiments to the main windows stack
         self.experiments_scroll = Gtk.ScrolledWindow()
         self.experiments_scroll.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC)
-        self.experiments_scroll.add(RtExperimentsWidgets.ExperimentsPage())
-        self.window_stack.add_titled(self.risiscript_scroll, "risiscript", "risiScript")
+        self.experiments_scroll.add(RtExperimentsWidgets.RisiExperimentsPage())
+        self.window_stack.add_titled(self.experiments_scroll, "experiments", "Experiments")
 
         # Adds catagory stack pages to title bar
         self.stack_switcher = Gtk.StackSwitcher(stack=self.window_stack)
