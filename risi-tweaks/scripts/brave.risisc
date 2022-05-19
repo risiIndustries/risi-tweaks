@@ -1,0 +1,30 @@
+#!/bin/risiscript
+metadata:
+  name: "Brave"
+  id: "io.risi.braveinstaller"
+  description: "Installs the Brave Browser."
+  dependencies: None
+  root: True
+  one_time_use: True
+  risiscript_version: 1.0
+  reboot: False
+
+install:
+  bash: |
+    dnf config-manager --add-repo https://brave-browser-rpm-release.s3.brave.com/x86_64/
+    rpm --import https://brave-browser-rpm-release.s3.brave.com/brave-core.asc
+    dnf install brave-browser -y
+  checks:
+    - COMMANDOUTPUTCONTAINS:
+      - "rpm -q brave-browser && echo installed || echo uninstalled"
+      - "installed"
+
+remove:
+  bash: |
+    dnf remove brave-browser -y
+    rm -f /etc/yum.repos.d/brave*.repo
+    rm -f /etc/default/brave-browser
+  checks:
+    - COMMANDOUTPUTCONTAINS:
+        - "rpm -q brave-browser && echo installed || echo uninstalled"
+        - "uninstalled"

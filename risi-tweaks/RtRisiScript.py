@@ -150,7 +150,6 @@ class RisiScriptStackPage(Gtk.Box):
         self.set_margin_top(10)
         self.set_margin_bottom(10)
 
-
     def launch_risi_script(self, button):
         procargs = ["risi-script-gtk", "--file", self.script.location]
         if self.trusted:

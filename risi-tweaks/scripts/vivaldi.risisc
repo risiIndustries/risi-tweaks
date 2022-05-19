@@ -1,0 +1,29 @@
+#!/bin/risiscript
+metadata:
+  name: "Vivaldi"
+  id: "io.risi.vivaldiinstaller"
+  description: "Installs the Vivaldi Browser."
+  dependencies: None
+  root: True
+  one_time_use: True
+  risiscript_version: 1.0
+  reboot: False
+
+install:
+  bash: |
+    dnf config-manager --add-repo https://repo.vivaldi.com/archive/vivaldi-fedora.repo
+    dnf install vivaldi-stable -y
+  checks:
+    - COMMANDOUTPUTCONTAINS:
+      - "rpm -q vivaldi-stable && echo installed || echo uninstalled"
+      - "installed"
+
+remove:
+  bash: |
+    dnf remove vivaldi-stable -y
+    rm -f /etc/yum.repos.d/vivaldi.repo
+    rm -f /etc/default/vivaldi
+  checks:
+    - COMMANDOUTPUTCONTAINS:
+        - "rpm -q vivaldi-stable && echo installed || echo uninstalled"
+        - "uninstalled"
