@@ -1,5 +1,5 @@
-Name:           risi-tweaks
-Version:        0.1
+Name:           risi-tweaks-next
+Version:        0.2
 Release:        13%{?dist}
 Summary:        risiOS's Tweak Tool
 
@@ -14,7 +14,8 @@ Requires:       python
 Requires:	    python3-gobject
 Requires:       python3-yaml
 
-Conflicts:      risi-tweaks-next
+Conflicts:      risi-tweaks
+Provides:				risi-tweaks
 
 %description
 The tweak tool for risiOS. Full alternative to GNOME Tweaks

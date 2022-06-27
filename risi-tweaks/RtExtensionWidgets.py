@@ -379,6 +379,7 @@ class ExtensionsPage(Gtk.Box):
         self.add(self.extension_frames)
         self.extension_frames.show_all()
 
+
 # Button for launching websites
 def launch_website(button, url):
     Gtk.show_uri_on_window(None, url, Gdk.CURRENT_TIME)
