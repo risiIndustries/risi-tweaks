@@ -1,0 +1,26 @@
+#!/bin/risiscript
+metadata:
+  name: "risiTweaks Next"
+  id: "io.risi.tweaks-next"
+  description: "Installs the development version of risiTweaks. Right now all this adds is Libadwaita theming support."
+  dependencies: None
+  root: True
+  one_time_use: True
+  risiscript_version: 1.0
+  reboot: False
+
+install:
+  bash: |
+    dnf swap risi-tweaks risi-tweaks-next -y
+  checks:
+    - COMMANDOUTPUTCONTAINS:
+      - "rpm -q risi-tweaks-next && echo installed || echo uninstalled"
+      - "installed"
+
+remove:
+  bash: |
+    dnf swap risi-tweaks-next risi-tweaks -y
+  checks:
+    - COMMANDOUTPUTCONTAINS:
+        - "rpm -q risi-tweaks && echo installed || echo uninstalled"
+        - "installed"

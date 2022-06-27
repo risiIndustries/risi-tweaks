@@ -14,6 +14,9 @@ Requires:       python
 Requires:	    python3-gobject
 Requires:       python3-yaml
 
+Conflicts:      risi-tweaks
+Provides:				risi-tweaks
+
 %description
 The tweak tool for risiOS. Full alternative to GNOME Tweaks
 
