@@ -11,9 +11,9 @@ BuildArch:	noarch
 
 BuildRequires:  python
 Requires:       python
-Requires:	      python3-gobject
+Requires:	    python3-gobject
 Requires:       python3-yaml
-Requires:				adwcolor
+Requires:		adwcolor
 
 Conflicts:      risi-tweaks
 Provides:		risi-tweaks
