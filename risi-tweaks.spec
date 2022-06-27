@@ -32,6 +32,7 @@ mkdir -p %{buildroot}%{_datadir}/applications
 mkdir -p %{buildroot}%{_datadir}/risi-script
 
 cp -a %{name}/scripts %{buildroot}%{_datadir}/risi-script/scripts
+cp -a %{name}/experiments %{buildroot}%{_datadir}/risi-script/experiments
 cp -a %{name} %{buildroot}%{_libdir}/risiOS/
 cp io.risi.Tweaks.desktop %{buildroot}%{_datadir}/applications/io.risi.Tweaks.desktop
 cp io.risi.Tweaks.svg %{buildroot}%{_datadir}/icons/hicolor/scalable/apps/io.risi.Tweaks.svg
@@ -42,6 +43,7 @@ install -m 755 %{name}/%{name} %{buildroot}%{_bindir}
 # %doc add-docs-here
 %dir %{_libdir}/risiOS/%{name}
 %{_datadir}/risi-script/scripts/*.risisc
+%{_datadir}/risi-script/experiments/*.risisc
 %{_datadir}/applications/io.risi.Tweaks.desktop
 %{_datadir}/icons/hicolor/scalable/apps/io.risi.Tweaks.svg
 %{_bindir}/%{name}
