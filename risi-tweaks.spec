@@ -1,6 +1,6 @@
 Name:           risi-tweaks
 Version:        0.1
-Release:        12%{?dist}
+Release:        13%{?dist}
 Summary:        risiOS's Tweak Tool
 
 License:        GPL v3
@@ -13,6 +13,8 @@ BuildRequires:  python
 Requires:       python
 Requires:	    python3-gobject
 Requires:       python3-yaml
+
+Conflicts:      risi-tweaks-next
 
 %description
 The tweak tool for risiOS. Full alternative to GNOME Tweaks

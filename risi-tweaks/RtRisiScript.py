@@ -162,7 +162,7 @@ class EmptyPage(Gtk.Box):
         Gtk.Box.__init__(self)
         label = Gtk.Label()
         label.set_markup(
-            "<big><b>risiScript</b></big>\n"
+            "<big><b>risiScript</b></big>\n\n"
             "Tweak your system the easy way"
         )
         label.set_justify(Gtk.Justification.CENTER)
