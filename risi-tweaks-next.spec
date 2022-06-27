@@ -15,7 +15,7 @@ Requires:	    python3-gobject
 Requires:       python3-yaml
 
 Conflicts:      risi-tweaks
-Provides:				risi-tweaks
+Provides:		risi-tweaks
 
 %description
 The tweak tool for risiOS. Full alternative to GNOME Tweaks
@@ -27,32 +27,32 @@ The tweak tool for risiOS. Full alternative to GNOME Tweaks
 %install
 
 mkdir -p %{buildroot}%{_bindir}
-mkdir -p %{buildroot}%{_libdir}/risiOS/%{name}/tweaks
+mkdir -p %{buildroot}%{_libdir}/risiOS/risi-tweaks/tweaks
 mkdir -p %{buildroot}%{_datadir}/icons/hicolor/scalable/apps
 mkdir -p %{buildroot}%{_datadir}/applications
 mkdir -p %{buildroot}%{_datadir}/risi-script
 
-cp -a %{name}/scripts %{buildroot}%{_datadir}/risi-script/scripts
-cp -a %{name}/experiments %{buildroot}%{_datadir}/risi-script/experiments
-cp -a %{name} %{buildroot}%{_libdir}/risiOS/
+cp -a risi-tweaks/scripts %{buildroot}%{_datadir}/risi-script/scripts
+cp -a risi-tweaks/experiments %{buildroot}%{_datadir}/risi-script/experiments
+cp -a risi-tweaks %{buildroot}%{_libdir}/risiOS/
 cp io.risi.Tweaks.desktop %{buildroot}%{_datadir}/applications/io.risi.Tweaks.desktop
 cp io.risi.Tweaks.svg %{buildroot}%{_datadir}/icons/hicolor/scalable/apps/io.risi.Tweaks.svg
-install -m 755 %{name}/%{name} %{buildroot}%{_bindir}
+install -m 755 risi-tweaks/risi-tweaks %{buildroot}%{_bindir}
 
 %files
 # %license add-license-file-here
 # %doc add-docs-here
-%dir %{_libdir}/risiOS/%{name}
+%dir %{_libdir}/risiOS/risi-tweaks
 %{_datadir}/risi-script/scripts/*.risisc
 %{_datadir}/risi-script/experiments/*.risisc
 %{_datadir}/applications/io.risi.Tweaks.desktop
 %{_datadir}/icons/hicolor/scalable/apps/io.risi.Tweaks.svg
-%{_bindir}/%{name}
-%{_libdir}/risiOS/%{name}/Rt*.py
-%{_libdir}/risiOS/%{name}/__init__.py
-%{_libdir}/risiOS/%{name}/__main__.py
-%{_libdir}/risiOS/%{name}/risi-tweaks
-%{_libdir}/risiOS/%{name}/*/*
+%{_bindir}/risi-tweaks
+%{_libdir}/risiOS/risi-tweaks/Rt*.py
+%{_libdir}/risiOS/risi-tweaks/__init__.py
+%{_libdir}/risiOS/risi-tweaks/__main__.py
+%{_libdir}/risiOS/risi-tweaks/risi-tweaks
+%{_libdir}/risiOS/risi-tweaks/*/*
 
 %changelog
 * Tue Jul 13 2021 PizzaLovingNerd
