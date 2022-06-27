@@ -7,10 +7,17 @@
       type: ToggleGSetting
       gsetting: [org.gnome.desktop.interface, enable-animations]
 - section:
-    name: "Theming"
+    name: "Modern Theming"
     settings:
     - setting:
-      name: "Application Theme (GTK Only)"
+      name: "Modern Application Accents"
+      type: AccentColors
+      description: Incompatible with non adw-gtk3 themes, applications require restart.
+- section:
+    name: "Other Theming"
+    settings:
+    - setting:
+      name: "Legacy Application Theme (GTK3 Only)"
       type: DropdownGSetting
       gsetting: [org.gnome.desktop.interface, gtk-theme]
       dropdown_options: gtk-themes
