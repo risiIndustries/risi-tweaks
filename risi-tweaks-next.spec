@@ -21,7 +21,7 @@ Provides:				risi-tweaks
 The tweak tool for risiOS. Full alternative to GNOME Tweaks
 
 %prep
-%autosetup -n %{name}-main
+%autosetup -n risi-tweaks-main
 
 %build
 %install
