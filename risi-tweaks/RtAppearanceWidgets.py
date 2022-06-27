@@ -53,42 +53,42 @@ Colors = {
     ),
     1: Theme({  # Green
         "accent_color": "@green_4",
-        "accent_bg_color": "@green_3",
+        "accent_bg_color": "@green_5",
         "accent_fg_color": "#ffffff"
     }),
     2: Theme({  # Orange
         "accent_color": "@orange_4",
-        "accent_bg_color": "@orange_3",
+        "accent_bg_color": "@orange_5",
         "accent_fg_color": "#ffffff"
     }),
     3: Theme({  # Yellow
-        "accent_color": "@yellow_5",
-        "accent_bg_color": "@yellow_4",
+        "accent_color": "@yellow_4",
+        "accent_bg_color": "@yellow_5",
         "accent_fg_color": "#ffffff"
     }),
     4: Theme({  # Red
         "accent_color": "@red_4",
-        "accent_bg_color": "@red_3",
+        "accent_bg_color": "@red_5",
         "accent_fg_color": "#ffffff"
     }),
     5: Theme({  # Purple
         "accent_color": "@purple_4",
-        "accent_bg_color": "@purple_3",
+        "accent_bg_color": "@purple_5",
         "accent_fg_color": "#ffffff"
     }),
     6: Theme({  # Brown
         "accent_color": "@brown_4",
-        "accent_bg_color": "@brown_3",
+        "accent_bg_color": "@brown_5",
         "accent_fg_color": "#ffffff"
     })
 }
 Preview_Colors = {
-    "@green_3": "#33d17a",
-    "@orange_3": "#ff7800",
-    "@yellow_4": "#f5c211",
-    "@red_3": "#e01b24",
-    "@purple_3": "#9141ac",
-    "@brown_3": "#986a44"
+    "@green_5": "#33d17a",
+    "@orange_5": "#ff7800",
+    "@yellow_5": "#f5c211",
+    "@red_5": "#e01b24",
+    "@purple_5": "#9141ac",
+    "@brown_5": "#986a44"
 }
 
 
