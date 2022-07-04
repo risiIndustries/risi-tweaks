@@ -122,6 +122,7 @@ class RisiScriptStackPage(Gtk.Box):
         description = Gtk.Label(label=script.metadata.description, xalign=0)
         description.set_vexpand(True)
         description.set_valign(Gtk.Align.FILL)
+        description.set_line_wrap(True)
 
         # Button
         button = Gtk.Button(label="Run Script")
