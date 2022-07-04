@@ -1,0 +1,29 @@
+#!/bin/risiscript
+metadata:
+  name: "Opera"
+  id: "io.risi.operainstaller"
+  description: "Installs the Opera Browser."
+  dependencies: None
+  root: True
+  one_time_use: True
+  risiscript_version: 1.0
+  reboot: False
+
+install:
+  bash: |
+    rpm --import https://rpm.opera.com/rpmrepo.key
+    dnf config-manager --add-repo https://rpm.opera.com/rpm
+    dnf install opera-stable -y
+  checks:
+    - COMMANDOUTPUTCONTAINS:
+      - "rpm -q opera-stable && echo installed || echo uninstalled"
+      - "installed"
+
+remove:
+  bash: |
+    dnf remove opera-stable -y
+    rm -f /etc/yum.repos.d/opera.repo
+  checks:
+    - COMMANDOUTPUTCONTAINS:
+        - "rpm -q opera-stable && echo installed || echo uninstalled"
+        - "uninstalled"

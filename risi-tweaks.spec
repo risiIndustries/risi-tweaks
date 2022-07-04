@@ -1,6 +1,6 @@
 Name:           risi-tweaks
 Version:        0.1
-Release:        8%{?dist}
+Release:        13%{?dist}
 Summary:        risiOS's Tweak Tool
 
 License:        GPL v3
@@ -11,8 +11,10 @@ BuildArch:	noarch
 
 BuildRequires:  python
 Requires:       python
-Requires:	python3-gobject, python3-yaml
-Requires:	risi-adwaita-recolor
+Requires:	    python3-gobject
+Requires:       python3-yaml
+
+Conflicts:      risi-tweaks-next
 
 %description
 The tweak tool for risiOS. Full alternative to GNOME Tweaks
@@ -25,8 +27,12 @@ The tweak tool for risiOS. Full alternative to GNOME Tweaks
 
 mkdir -p %{buildroot}%{_bindir}
 mkdir -p %{buildroot}%{_libdir}/risiOS/%{name}/tweaks
-mkdir -p %{buildroot}%{_datadir}/applications/
+mkdir -p %{buildroot}%{_datadir}/icons/hicolor/scalable/apps
+mkdir -p %{buildroot}%{_datadir}/applications
+mkdir -p %{buildroot}%{_datadir}/risi-script
 
+cp -a %{name}/scripts %{buildroot}%{_datadir}/risi-script/scripts
+cp -a %{name}/experiments %{buildroot}%{_datadir}/risi-script/experiments
 cp -a %{name} %{buildroot}%{_libdir}/risiOS/
 cp io.risi.Tweaks.desktop %{buildroot}%{_datadir}/applications/io.risi.Tweaks.desktop
 cp io.risi.Tweaks.svg %{buildroot}%{_datadir}/icons/hicolor/scalable/apps/io.risi.Tweaks.svg
@@ -36,16 +42,12 @@ install -m 755 %{name}/%{name} %{buildroot}%{_bindir}
 # %license add-license-file-here
 # %doc add-docs-here
 %dir %{_libdir}/risiOS/%{name}
+%{_datadir}/risi-script/scripts/*.risisc
+%{_datadir}/risi-script/experiments/*.risisc
 %{_datadir}/applications/io.risi.Tweaks.desktop
 %{_datadir}/icons/hicolor/scalable/apps/io.risi.Tweaks.svg
 %{_bindir}/%{name}
-%{_libdir}/risiOS/%{name}/RtAppearanceWidgets.py
-%{_libdir}/risiOS/%{name}/RtBaseWidgets.py
-%{_libdir}/risiOS/%{name}/RtCustomWidgets.py
-%{_libdir}/risiOS/%{name}/RtExtensionWidgets.py
-%{_libdir}/risiOS/%{name}/RtMainWindow.py
-%{_libdir}/risiOS/%{name}/RtSettingsToWidget.py
-%{_libdir}/risiOS/%{name}/RtUtils.py
+%{_libdir}/risiOS/%{name}/Rt*.py
 %{_libdir}/risiOS/%{name}/__init__.py
 %{_libdir}/risiOS/%{name}/__main__.py
 %{_libdir}/risiOS/%{name}/risi-tweaks

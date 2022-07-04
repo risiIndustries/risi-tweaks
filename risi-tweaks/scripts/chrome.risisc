@@ -1,0 +1,28 @@
+#!/bin/risiscript
+metadata:
+  name: "Chrome"
+  id: "io.risi.chromeinstaller"
+  description: "Installs the popular browser from Google."
+  dependencies: None
+  root: True
+  one_time_use: True
+  risiscript_version: 1.0
+  reboot: False
+
+install:
+  bash: |
+    dnf install https://dl.google.com/linux/direct/google-chrome-stable_current_x86_64.rpm -y
+  checks:
+    - COMMANDOUTPUTCONTAINS:
+      - "rpm -q google-chrome-stable && echo installed || echo uninstalled"
+      - "installed"
+
+remove:
+  bash: |
+    dnf remove google-chrome-stable -y
+    rm -f /etc/yum.repos.d/google-chrome.repo
+    rm -f /etc/default/google-chrome
+  checks:
+    - COMMANDOUTPUTCONTAINS:
+        - "rpm -q google-chrome-stable && echo installed || echo uninstalled"
+        - "uninstalled"

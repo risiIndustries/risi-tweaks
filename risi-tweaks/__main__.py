@@ -13,13 +13,15 @@ class Application(Gtk.Application):
     def __init__(self):
         Gtk.Application.__init__(
             self,
-            application_id="io.risi.tweaks"
+            application_id="io.risi.Tweaks"
         )
         self.window = None
 
     def do_activate(self):
         if not self.window:
             self.window = RtMainWindow(self)
+            self.window.set_title("risiTweaks")
+            self.window.set_icon_name("webapp-manager")
             self.add_window(self.window)
             self.window.show_all()
         self.window.present()

@@ -1,0 +1,31 @@
+#!/bin/risiscript
+metadata:
+  name: "Edge"
+  id: "io.risi.edgeinstaller"
+  description: "Installs the Edge Browser."
+  dependencies: None
+  root: True
+  one_time_use: True
+  risiscript_version: 1.0
+  reboot: False
+
+install:
+  bash: |
+    rpm --import https://packages.microsoft.com/keys/microsoft.asc
+    dnf config-manager --add-repo https://packages.microsoft.com/yumrepos/edge
+    dnf install -y microsoft-edge-stable
+  checks:
+    - COMMANDOUTPUTCONTAINS:
+      - "rpm -q microsoft-edge-stable && echo installed || echo uninstalled"
+      - "installed"
+
+remove:
+  bash: |
+    dnf remove microsoft-edge-stable -y
+    rm -f /etc/yum.repos.d/microsoft-edge.repo
+    rm -f /etc/yum.repos.d/packages.microsoft.com_yumrepos_edge.repo
+    rm -f /etc/default/microsoft-edge
+  checks:
+    - COMMANDOUTPUTCONTAINS:
+        - "rpm -q microsoft-edge-stable && echo installed || echo uninstalled"
+        - "uninstalled"

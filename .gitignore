@@ -1,0 +1,14 @@
+.idea/.gitignore
+.idea/misc.xml
+.idea/modules.xml
+.idea/risi-tweaks.iml
+.idea/vcs.xml
+.idea/inspectionProfiles/profiles_settings.xml
+risi-tweaks/__pycache__/RtBaseWidgets.cpython-310.pyc
+risi-tweaks/__pycache__/RtCustomWidgets.cpython-310.pyc
+risi-tweaks/__pycache__/RtExperimentsWidgets.cpython-310.pyc
+risi-tweaks/__pycache__/RtExtensionWidgets.cpython-310.pyc
+risi-tweaks/__pycache__/RtMainWindow.cpython-310.pyc
+risi-tweaks/__pycache__/RtRisiScript.cpython-310.pyc
+risi-tweaks/__pycache__/RtSettingsToWidget.cpython-310.pyc
+risi-tweaks/__pycache__/RtUtils.cpython-310.pyc
