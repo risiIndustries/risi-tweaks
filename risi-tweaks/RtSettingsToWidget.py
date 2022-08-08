@@ -4,6 +4,7 @@
 
 import RtBaseWidgets
 import RtCustomWidgets
+import RtAppearanceWidgets
 import gi
 
 gi.require_version("Gtk", "3.0")
@@ -70,7 +71,7 @@ def get_base_widget(setting):
                 setting["extension"]
             )
         else:
-            return get_custom_widget(setting) # Tries to get a custom widget if it's not a base widget
+            return get_custom_widget(setting)  # Tries to get a custom widget if it's not a base widget
     else:
         print(setting)
         return RtBaseWidgets.Label("Error")
@@ -83,11 +84,14 @@ def get_custom_widget(setting):
             widget = RtCustomWidgets.RaiseWindowWhenFocused()
             needs_start_function.append(widget)
             return widget
+        if setting["type"] == "AccentColors":
+            widget = RtAppearanceWidgets.AccentColors()
+            return widget
         else:
-            print(setting)
+            print(f"Error involving: {str(setting)}")
             return RtBaseWidgets.Label("Error")
     else:
-        print(setting)
+        print(f"Error involving: {str(setting)}")
         return RtBaseWidgets.Label("Error")
 
 
