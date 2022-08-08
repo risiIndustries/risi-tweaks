@@ -1,4 +1,4 @@
-Name:           risi-tweaks-next
+Name:           risi-tweaks
 Version:        0.2
 Release:        15%{?dist}
 Summary:        risiOS's Tweak Tool
@@ -56,5 +56,8 @@ install -m 755 risi-tweaks/risi-tweaks %{buildroot}%{_bindir}
 %{_libdir}/risiOS/risi-tweaks/*/*
 
 %changelog
+* Sun Aug 07 2022 PizzaLovingNerd
+- Added accent colors 
+
 * Tue Jul 13 2021 PizzaLovingNerd
 - First spec file
