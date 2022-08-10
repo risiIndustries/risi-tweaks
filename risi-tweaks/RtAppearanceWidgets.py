@@ -159,9 +159,7 @@ class CustomColorsButton(RtBaseWidgets.Option):
         RtBaseWidgets.Description.__init__(self, "Incompatible with non adw-gtk3 themes, applications require restart.")
 
         self.application = application
-        self.window = RtColorWindow.RtColorWindow(self.application)
-        self.window.set_destroy_with_parent(True)
-        self.application.add_window(self.window)
+        self.window = None
 
         button = Gtk.Button(label="Custom Colors")
         button.connect("clicked", self.launch_custom_colors)
@@ -169,9 +167,16 @@ class CustomColorsButton(RtBaseWidgets.Option):
         self.set_margin_bottom(10)
         self.add(button)
 
-    def launch_custom_colors(self, widget):
-        self.window.show_all()
+    def generate_window(self):
+        self.window = RtColorWindow.RtColorWindow(self.application)
+        self.window.set_destroy_with_parent(True)
+        self.application.add_window(self.window)
         self.window.set_transient_for(self.get_toplevel())
+
+    def launch_custom_colors(self, widget):
+        self.generate_window()
+        self.window.show_all()
+
 
 # Code Stolen from https://python-gtk-3-tutorial.readthedocs.io/en/latest/layout.html to render color
 def on_draw(widget, cr, data):
