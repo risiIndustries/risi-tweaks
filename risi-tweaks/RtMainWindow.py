@@ -20,7 +20,8 @@ from gi.repository import Gtk
 # Launches main window of risiTweaks
 class RtMainWindow(Gtk.ApplicationWindow):
     def __init__(self, app):
-        Gtk.ApplicationWindow.__init__(self, application=app, title="Risi Tweaks")
+        Gtk.ApplicationWindow.__init__(self, application=app, title="risiTweaks")
+        RtSettingsToWidget.application = app
         self.set_default_size(-1, 500)
         self.set_position(Gtk.WindowPosition.CENTER)
         self.set_icon_name("io.risi.tweaks")
@@ -41,7 +42,7 @@ class RtMainWindow(Gtk.ApplicationWindow):
                 if file.endswith(".yml") or file.endswith(".yaml"):
                     with open(dir + "/" + file) as f:
                         self.data = yaml.safe_load(f)  # Loads yaml file as dictionary
-                        self.stackpage = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
+                        self.stack_page = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
                         for section in self.data:
                             self.section = section["section"]  # Gets section of yaml file
                             self.label = self.section["name"]
@@ -51,16 +52,16 @@ class RtMainWindow(Gtk.ApplicationWindow):
                                 self.frame = RtBaseWidgets.Frame(self.label)  # Creates frame for section in YAML file
                                 for setting in self.section["settings"]:  # Creates a widget from yaml file setting
                                     self.frame.add(RtSettingsToWidget.setting_to_widget(setting))
-                                self.stackpage.set_margin_start(10)
-                                self.stackpage.set_margin_end(10)
-                                self.stackpage.set_margin_top(10)
-                                self.stackpage.set_margin_bottom(10)
+                                self.stack_page.set_margin_start(10)
+                                self.stack_page.set_margin_end(10)
+                                self.stack_page.set_margin_top(10)
+                                self.stack_page.set_margin_bottom(10)
                                 if self.label is not None and self.label != "" and self.label.lower() != "none":
-                                    self.stackpage.add(self.frame.label)  # Adds label if it exists
-                                self.stackpage.add(self.frame)  # Adds frame
+                                    self.stack_page.add(self.frame.label)  # Adds label if it exists
+                                self.stack_page.add(self.frame)  # Adds frame
                                 self.scrolled_page = Gtk.ScrolledWindow()  # Creates page in scrolled window
                                 self.scrolled_page.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC)
-                                self.scrolled_page.add(self.stackpage)
+                                self.scrolled_page.add(self.stack_page)
                 self.stackpagename = os.path.basename(os.path.splitext(dir + "/" + file)[0])  # Creates name for stack
 
                 # Adds page to side bar in the category

@@ -15,11 +15,12 @@ extension_proxy = RtUtils.ExtensionProxy()
 
 default_extensions = [
     "appindicatorsupport@rgcjonas.gmail.com",
-	"drive-menu@gnome-shell-extensions.gcampax.github.com",
-	"dock-from-dash@fthx",
-	"risiGNOME@risi.io",
-	"sound-output-device-chooser@kgshank.net"
+    "drive-menu@gnome-shell-extensions.gcampax.github.com",
+    "dock-from-dash@fthx",
+    "risiGNOME@risi.io",
+    "sound-output-device-chooser@kgshank.net"
 ]
+
 
 # This is where the extension name, settings button,
 # toggle switch, reveal button, and error indicator go
@@ -44,7 +45,7 @@ class ExtensionTopItem(RtBaseWidgets.Option):
         # 5 = Downloading
         # 6 = Initialized
         if self.extension["state"] != 1 and \
-            self.extension["state"] != 2 and \
+                self.extension["state"] != 2 and \
                 self.extension["state"] != 6:
 
             if self.extension["state"] == 3:
@@ -282,29 +283,32 @@ class ExtensionsFrames(Gtk.Box):
         self.systemExtensions = [
             ext for ext in self.extensions
             if self.extensions[ext]["type"] == 1
-            and self.extensions[ext]["uuid"] not in default_extensions
+               and self.extensions[ext]["uuid"] not in default_extensions
         ]
         self.localExtensions = [
             ext for ext in self.extensions
             if self.extensions[ext]["type"] == 2
-            and self.extensions[ext]["uuid"] not in default_extensions
+               and self.extensions[ext]["uuid"] not in default_extensions
         ]
 
         if self.defaultExtensions:
-            self.defaultFrame = RtBaseWidgets.Frame("Default Extensions") # Frame for built-in extensions
-            self.defaultFrame.add(ExtensionsList(self.extensions, self.defaultExtensions))  # Adds system installed extensions to system frame
+            self.defaultFrame = RtBaseWidgets.Frame("Default Extensions")  # Frame for built-in extensions
+            self.defaultFrame.add(ExtensionsList(self.extensions,
+                                                 self.defaultExtensions))  # Adds system installed extensions to system frame
             self.add(self.defaultFrame.label)
             self.add(self.defaultFrame)
 
         if self.systemExtensions:
-            self.systemFrame = RtBaseWidgets.Frame("Built-In Extensions") # Frame for built-in extensions
-            self.systemFrame.add(ExtensionsList(self.extensions, self.systemExtensions))  # Adds system installed extensions to system frame
+            self.systemFrame = RtBaseWidgets.Frame("Built-In Extensions")  # Frame for built-in extensions
+            self.systemFrame.add(ExtensionsList(self.extensions,
+                                                self.systemExtensions))  # Adds system installed extensions to system frame
             self.add(self.systemFrame.label)
             self.add(self.systemFrame)
 
         if self.localExtensions:
-            self.localFrame = RtBaseWidgets.Frame("Manually Installed Extensions") # Frame for local extensions
-            self.localFrame.add(ExtensionsList(self.extensions, self.localExtensions))  # Adds locally installed extensions to system locally
+            self.localFrame = RtBaseWidgets.Frame("Manually Installed Extensions")  # Frame for local extensions
+            self.localFrame.add(ExtensionsList(self.extensions,
+                                               self.localExtensions))  # Adds locally installed extensions to system locally
             self.add(self.localFrame.label)
             self.add(self.localFrame)
 

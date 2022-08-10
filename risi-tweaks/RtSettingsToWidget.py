@@ -13,6 +13,7 @@ from gi.repository import Gtk
 needs_start_function = []
 requires_extension = []
 known_schemas = RtBaseWidgets.known_schemas
+application = None
 
 
 # Checks for special properties in a widget before returning a widget
@@ -86,6 +87,9 @@ def get_custom_widget(setting):
             return widget
         if setting["type"] == "AccentColors":
             widget = RtAppearanceWidgets.AccentColors()
+            return widget
+        if setting["type"] == "CustomColorsButton":
+            widget = RtAppearanceWidgets.CustomColorsButton(application)
             return widget
         else:
             print(f"Error involving: {str(setting)}")

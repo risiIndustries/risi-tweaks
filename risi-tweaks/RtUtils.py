@@ -8,6 +8,7 @@ from gi.repository import Gio
 
 _HOME = os.getenv("HOME")
 
+
 # Checks all subdirectories for a file and adds it to a list
 # (used for things like checking GTK themes)
 def check_dir_for_file_to_list(input_list, directory, file_check):

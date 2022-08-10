@@ -5,8 +5,8 @@ import os
 
 import gi
 import RtBaseWidgets
+import RtColorWindow
 import adwcolor.functions
-import adwcolor.properties
 
 gi.require_version("Gtk", "3.0")
 gi.require_version("Gdk", "3.0")
@@ -110,16 +110,16 @@ class AccentColors(RtBaseWidgets.Option):
     def __init__(self):
         RtBaseWidgets.Option.__init__(self, "Accent Colors: ")
         self.add(AccentFlowBox(Colors))
+        self.set_margin_top(10)
+        self.set_margin_end(5)
 
 
 class AccentFlowBox(Gtk.FlowBox):
     def __init__(self, colors):
         Gtk.FlowBox.__init__(self)
         self.colors = colors
-        # self.set_hexpand(True)
         self.set_vexpand(False)
         self.set_valign(Gtk.Align.START)
-        #self.set_halign(Gtk.Align.CENTER)
         self.set_min_children_per_line(100)
         self.set_size_request(-1, 30)
 
@@ -152,6 +152,30 @@ class AccentButton(Gtk.DrawingArea):
         self.set_hexpand(False)
         self.set_size_request(16, 16)
         self.connect("draw", on_draw, {"color": self.rgba})
+
+
+class CustomColorsButton(RtBaseWidgets.Option):
+    def __init__(self, application):
+        RtBaseWidgets.Description.__init__(self, "Incompatible with non adw-gtk3 themes, applications require restart.")
+
+        self.application = application
+        self.window = None
+
+        button = Gtk.Button(label="Custom Colors")
+        button.connect("clicked", self.launch_custom_colors)
+        self.set_margin_end(5)
+        self.set_margin_bottom(10)
+        self.add(button)
+
+    def generate_window(self):
+        self.window = RtColorWindow.RtColorWindow(self.application)
+        self.window.set_destroy_with_parent(True)
+        self.application.add_window(self.window)
+        self.window.set_transient_for(self.get_toplevel())
+
+    def launch_custom_colors(self, widget):
+        self.generate_window()
+        self.window.show_all()
 
 
 # Code Stolen from https://python-gtk-3-tutorial.readthedocs.io/en/latest/layout.html to render color
