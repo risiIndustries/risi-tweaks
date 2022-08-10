@@ -12,7 +12,9 @@
     - setting:
       name: "Modern Application Accents"
       type: AccentColors
-      description: Incompatible with non adw-gtk3 themes, applications require restart.
+    - setting:
+      name: "Modern Application Accents"
+      type: CustomColorsButton
 - section:
     name: "Other Theming"
     settings:

@@ -1,12 +1,9 @@
 import os
-import subprocess
 import yaml
 
 import gi
 import RtRisiScript
 import risiscript
-
-from enum import Enum
 
 gi.require_version("Gtk", "3.0")
 from gi.repository import Gtk, Gio
@@ -18,8 +15,6 @@ class RisiExperimentsPage(Gtk.Box):
         scripts = load_experiments()
 
         self.stack = Gtk.Stack()
-        for script in scripts:
-            print(script.metadata.id)
         self.sidebar = RtRisiScript.RisiScriptStackSidebar(self.stack, scripts)
 
         self.add(self.sidebar)
