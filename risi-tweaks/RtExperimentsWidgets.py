@@ -65,5 +65,4 @@ def load_experiments():
                         script.state = RtRisiScript.RisiScriptState.TRUSTED_SCRIPT
                     script.location = f.name
                     scripts.append(script)
-                    print(script.location)
     return scripts

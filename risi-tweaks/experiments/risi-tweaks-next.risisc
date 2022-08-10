@@ -2,7 +2,7 @@
 metadata:
   name: "risiTweaks Next"
   id: "io.risi.tweaks-next"
-  description: "Installs the development version of risiTweaks. Right now all this adds is Libadwaita theming support."
+  description: "Installs the development version of risiTweaks. Currently adds nothing because the recent experiment was a success."
   dependencies: None
   root: True
   one_time_use: True
