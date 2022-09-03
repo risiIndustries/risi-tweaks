@@ -1,4 +1,4 @@
-Name:           risi-tweaks
+Name:           risi-tweaks-next
 Version:        36.1.1
 Release:        17%{?dist}
 Summary:        risiOS's Tweak Tool
