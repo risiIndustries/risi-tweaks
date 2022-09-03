@@ -79,7 +79,8 @@ class ColorWidget(RtBaseWidgets.Option):
         # Add color picker
         self.color_picker = Gtk.ColorButton()
         self.color_picker.connect("color-set", self.apply)
-        self.color_picker.set_margin_end(10)
+        #self.color_picker.set_margin_end(5)
+        self.color_picker.set_relief(Gtk.ReliefStyle.NONE)
 
         # Thanks GNOME for making me do this...
         Gtk.ColorChooser.set_use_alpha(self.color_picker, True)
@@ -89,6 +90,7 @@ class ColorWidget(RtBaseWidgets.Option):
         self.default_button = Gtk.Button()
         self.default_button.set_image(Gtk.Image.new_from_icon_name("view-refresh", Gtk.IconSize.BUTTON))
         self.default_button.set_margin_end(5)
+        self.default_button.set_relief(Gtk.ReliefStyle.NONE)
         self.default_button.connect("clicked", self.restore)
         self.add(self.color_picker)
         self.add(self.default_button)
@@ -144,7 +146,7 @@ class RtColorWindow(Gtk.ApplicationWindow):
         self.box.set_margin_bottom(10)
 
         label_top = RtBaseWidgets.Label("Color Customization")
-        label_bottom = RtBaseWidgets.Description("<small>Only Applies to Gtk3 Apps if adw-gtk3 is set as gtk "
+        label_bottom = RtBaseWidgets.Description("<small>Only Applies to gtk3 Apps if adw-gtk3 is set as gtk "
                                                  "theme.\nAll colors will reset when switching between light and dark "
                                                  "mode.\nApplications require restart.</small>")
         label_top.label.set_margin_bottom(0)

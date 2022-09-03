@@ -1,6 +1,6 @@
 Name:           risi-tweaks
-Version:        0.2
-Release:        16%{?dist}
+Version:        36.1.1
+Release:        17%{?dist}
 Summary:        risiOS's Tweak Tool
 
 License:        GPL v3
@@ -56,6 +56,10 @@ install -m 755 risi-tweaks/risi-tweaks %{buildroot}%{_bindir}
 %{_libdir}/risiOS/risi-tweaks/*/*
 
 %changelog
+* Fri Sep 02 2022 PizzaLovingNerd
+- Changed version scheme to match risiOS
+- Made button borders invisible in color selection window
+
 * Sun Aug 07 2022 PizzaLovingNerd
 - Added accent colors 
 
