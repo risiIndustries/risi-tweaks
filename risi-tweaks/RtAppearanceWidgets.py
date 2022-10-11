@@ -4,178 +4,166 @@
 import os
 
 import gi
+import rthemelib
+
 import RtBaseWidgets
 import RtColorWindow
 import adwcolor.functions
 
 gi.require_version("Gtk", "3.0")
 gi.require_version("Gdk", "3.0")
-from gi.repository import Gtk, Gdk
+from gi.repository import Gtk, Gdk, Gio
+
+settings = Gio.Settings.new("io.risi.rtheme")
 
 
-class Theme:
-    def __init__(self, props):
-        self.props = props
-
-    def apply(self):
-        for item in self.props.items():
-            adwcolor.functions.modify(item[0], item[1])
-
-    def is_enabled(self):
-        for item in self.props.items():
-            if not adwcolor.functions.get_value(item[0]) == item[1]:
-                return False
-        return True
-
-
-class Default(Theme):
-    def __init__(self, props):
-        super().__init__({})
-        self.props = props
-
-    def apply(self):
-        for prop in self.props:
-            adwcolor.functions.restore(prop)
-
-    def is_enabled(self):
-        if not os.path.exists(f"{os.path.expanduser('~')}/.config/gtk-4.0/gtk.css"):
-            return True
-        else:
-            for item in self.props:
-                if adwcolor.functions.get_value(item) is None:
-                    return True
-        return False
-
-
-Colors = {
-    0: Default(  # Blue (Default)
-        ["accent_color", "accent_bg_color", "accent_fg_color"]
-    ),
-    1: Theme({  # Green
-        "accent_color": "@green_4",
-        "accent_bg_color": "@green_5",
-        "accent_fg_color": "#ffffff"
-    }),
-    2: Theme({  # Orange
-        "accent_color": "@orange_4",
-        "accent_bg_color": "@orange_5",
-        "accent_fg_color": "#ffffff"
-    }),
-    3: Theme({  # Yellow
-        "accent_color": "@yellow_4",
-        "accent_bg_color": "@yellow_5",
-        "accent_fg_color": "#ffffff"
-    }),
-    4: Theme({  # Red
-        "accent_color": "@red_4",
-        "accent_bg_color": "@red_5",
-        "accent_fg_color": "#ffffff"
-    }),
-    5: Theme({  # Purple
-        "accent_color": "@purple_4",
-        "accent_bg_color": "@purple_5",
-        "accent_fg_color": "#ffffff"
-    }),
-    6: Theme({  # Brown
-        "accent_color": "@brown_4",
-        "accent_bg_color": "@brown_5",
-        "accent_fg_color": "#ffffff"
-    })
-}
-Preview_Colors = {
-    "@green_5": "#33d17a",
-    "@orange_5": "#ff7800",
-    "@yellow_5": "#f5c211",
-    "@red_5": "#e01b24",
-    "@purple_5": "#9141ac",
-    "@brown_5": "#986a44"
-}
-
-
-class Custom(Theme):
+class VariantStack(Gtk.Stack):
     def __init__(self):
-        super().__init__({})
+        Gtk.Stack.__init__(self)
+        self.set_transition_duration(0)
+        settings.connect("changed::theme-name", self.theme_changed)
 
-    def apply(self):
-        pass
+        self.add_named(VariantDropdown(), "dropdown")
+        self.add_named(AccentColors(), "color")
 
-    def is_enabled(self):
-        for color in Colors.values():
-            if color.is_enabled():
-                return False
-        return True
+    def start_function(self):
+        self.theme_changed(None, None)
+        self.set_transition_duration(500)
+
+    def theme_changed(self, setting, key):
+        if settings.get_string("theme-name") == "risi":
+            self.set_transition_type(Gtk.StackTransitionType.SLIDE_UP)
+            self.set_visible_child_name("color")
+        else:
+            self.set_transition_type(Gtk.StackTransitionType.SLIDE_DOWN)
+            self.set_visible_child_name("dropdown")
+
+
+class VariantDropdown(RtBaseWidgets.DropdownGSetting):
+    def __init__(self):
+        super().__init__(
+            "rTheme Variant",
+            "io.risi.rtheme",
+            "variant-name",
+            [], []
+        )
+        self.setting.connect("changed", self.on_setting_changed)
+        self.change_theme = False
+        self.gen_menu()
+
+    def dropdown_changed(self, dropdown, key, case):
+        if self.change_theme:
+            self.change_theme = False
+            self.setting.set_string(key, self.dropdown.get_active_text())
+            self.change_theme = True
+
+    def gen_menu(self):
+        self.change_theme = False
+        variants = rthemelib.get_current_theme().variants
+        for variant in variants:
+            self.case.append(variant.name)
+            self.menu.append(variant.name)
+
+        for entry in self.menu:  # Adds items to dropdown
+            self.dropdown.append_text(entry)
+
+        if self.setting.get_string("variant-name") in self.case:
+            self.dropdown.set_active(self.case.index(self.setting.get_string("variant-name")))
+        else:
+            self.dropdown.set_active(0)
+        self.change_theme = True
+
+    def on_setting_changed(self, setting, changed_key):
+        if changed_key == "theme-name":
+            self.change_theme = False
+            self.dropdown.remove_all()
+            self.case = []
+            self.menu = []
+            self.gen_menu()
+
+
+colors = ["main", "blue", "green", "orange", "yellow", "red", "purple", "brown"]
+
+color_previews = {
+    "main": "#ed4a3f",
+    "blue": "#1c71d8",
+    "green": "#2ec27e",
+    "orange": "#e66100",
+    "yellow": "#f5c211",
+    "red": "#c01c28",
+    "purple": "#813d9c",
+    "brown": "#865e3c"
+}
 
 
 class AccentColors(RtBaseWidgets.Option):
     def __init__(self):
-        RtBaseWidgets.Option.__init__(self, "Accent Colors: ")
-        self.add(AccentFlowBox(Colors))
+        RtBaseWidgets.Option.__init__(self, "Accent Colors")
+        self.add(AccentFlowBox())
+        self.set_vexpand(False)
+        self.set_valign(Gtk.Align.START)
+        self.label.set_hexpand(False)
+        self.label.set_halign(Gtk.Align.START)
         self.set_margin_top(10)
         self.set_margin_end(5)
 
 
 class AccentFlowBox(Gtk.FlowBox):
-    def __init__(self, colors):
+    def __init__(self):
         Gtk.FlowBox.__init__(self)
-        self.colors = colors
         self.set_vexpand(False)
         self.set_valign(Gtk.Align.START)
-        self.set_min_children_per_line(100)
-        self.set_size_request(-1, 30)
+        self.set_hexpand(True)
+        self.set_halign(Gtk.Align.END)
+        self.set_min_children_per_line(8)
+        # self.set_size_request(-1, -1)
 
-        for color in self.colors:
-            self.add(AccentButton(colors[color]))
-            if colors[color].is_enabled():
-                self.select_child(self.get_child_at_index(color))
+        for color in colors:
+            self.add(AccentButton(color))
+            try:
+                self.select_child(
+                    self.get_child_at_index(
+                        colors.index(settings.get_string("variant-name"))
+                    )
+                )
+            except TypeError:
+                self.select_child(self.get_child_at_index(0))
 
         self.connect("selected-children-changed", self.child_activated)
+        settings.connect("changed::variant-name", self.on_setting_changed)
 
     def child_activated(self, flowbox):
-        self.colors[flowbox.get_selected_children()[0].get_index()].apply()
+        try:
+            settings.set_string("variant-name", colors[flowbox.get_selected_children()[0].get_index()])
+        except ValueError:
+            pass
+
+    def on_setting_changed(self, setting, key):
+        try:
+            self.select_child(
+                self.get_child_at_index(
+                    colors.index(settings.get_string("variant-name"))
+                )
+            )
+        except TypeError:
+            self.select_child(self.get_child_at_index(0))
 
 
 class AccentButton(Gtk.DrawingArea):
     def __init__(self, color):
         Gtk.DrawingArea.__init__(self)
         self.rgba = Gdk.RGBA()
-        if isinstance(color, Default):
-            self.rgba.parse("#3584e4")
-        else:
-            self.rgba.parse(Preview_Colors[color.props["accent_bg_color"]])
+        self.rgba.parse(color_previews[color])
 
-        self.set_margin_start(5)
-        self.set_margin_end(5)
-        self.set_margin_top(5)
-        self.set_margin_bottom(5)
+        self.set_margin_start(3)
+        self.set_margin_end(3)
+        self.set_margin_top(3)
+        self.set_margin_bottom(3)
         self.set_valign(Gtk.Align.START)
         self.set_halign(Gtk.Align.CENTER)
         self.set_hexpand(False)
         self.set_size_request(16, 16)
         self.connect("draw", on_draw, {"color": self.rgba})
-
-
-class CustomColorsButton(RtBaseWidgets.Option):
-    def __init__(self, application):
-        RtBaseWidgets.Description.__init__(self, "Incompatible with non adw-gtk3 themes, applications require restart.")
-
-        self.application = application
-        self.window = None
-
-        button = Gtk.Button(label="Custom Colors")
-        button.connect("clicked", self.launch_custom_colors)
-        self.set_margin_end(5)
-        self.set_margin_bottom(10)
-        self.add(button)
-
-    def generate_window(self):
-        self.window = RtColorWindow.RtColorWindow(self.application)
-        self.window.set_destroy_with_parent(True)
-        self.application.add_window(self.window)
-        self.window.set_transient_for(self.get_toplevel())
-
-    def launch_custom_colors(self, widget):
-        self.generate_window()
-        self.window.show_all()
 
 
 # Code Stolen from https://python-gtk-3-tutorial.readthedocs.io/en/latest/layout.html to render color

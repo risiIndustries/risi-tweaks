@@ -10,11 +10,17 @@
     name: "Modern Theming"
     settings:
     - setting:
-      name: "Modern Application Accents"
-      type: AccentColors
+      name: "rTheme"
+      type: DropdownGSetting
+      gsetting: [io.risi.rtheme, theme-name]
+      dropdown_options: rthemes
+      dropdown_keys: same
+      description: |
+        This is a custom theming engine created by risiIndustries that automatically applies
+        Libadwaita colors to applications to make theming as easy as the old days.
     - setting:
-      name: "Modern Application Accents"
-      type: CustomColorsButton
+      name: "rTheme Variants"
+      type: VariantStack
 - section:
     name: "Other Theming"
     settings:
@@ -24,6 +30,9 @@
       gsetting: [org.gnome.desktop.interface, gtk-theme]
       dropdown_options: gtk-themes
       dropdown_keys: same
+      description: |
+        WARNING: Changing this setting may make your system look like a mess.
+        It is recommended to use rTheme instead.
     - setting:
       name: "Icon Theme"
       type: DropdownGSetting

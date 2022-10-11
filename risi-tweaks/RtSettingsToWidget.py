@@ -85,11 +85,9 @@ def get_custom_widget(setting):
             widget = RtCustomWidgets.RaiseWindowWhenFocused()
             needs_start_function.append(widget)
             return widget
-        if setting["type"] == "AccentColors":
-            widget = RtAppearanceWidgets.AccentColors()
-            return widget
-        if setting["type"] == "CustomColorsButton":
-            widget = RtAppearanceWidgets.CustomColorsButton(application)
+        if setting["type"] == "VariantStack":
+            widget = RtAppearanceWidgets.VariantStack()
+            needs_start_function.append(widget)
             return widget
         else:
             print(f"Error involving: {str(setting)}")

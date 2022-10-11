@@ -3,6 +3,7 @@
 # Licensed Under GPL3
 # By PizzaLovingNerd
 
+import rthemelib
 import os
 from gi.repository import Gio
 
@@ -109,11 +110,17 @@ def get_cursor_themes():
     return cursor_themes
 
 
+def get_rtheme_variants():
+    return rthemelib.get_current_theme().variants
+
+
 # Functions that yaml files can link too
 functions = {
     "gtk-themes": get_gtk_themes(),
     "icon-themes": get_icon_themes(),
-    "cursor-themes": get_cursor_themes()
+    "cursor-themes": get_cursor_themes(),
+    "rthemes": rthemelib.get_theme_list(),
+    "rtheme_variants": get_rtheme_variants(),
 }
 
 

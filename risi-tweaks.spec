@@ -1,6 +1,6 @@
 Name:           risi-tweaks
-Version:        36.1.1
-Release:        17%{?dist}
+Version:        37
+Release:        18%{?dist}
 Summary:        risiOS's Tweak Tool
 
 License:        GPL v3
@@ -13,7 +13,7 @@ BuildRequires:  python
 Requires:       python
 Requires:	    python3-gobject
 Requires:       python3-yaml
-Requires:		adwcolor
+Requires:       rtheme-lib
 
 Conflicts:      risi-tweaks
 Provides:		risi-tweaks
