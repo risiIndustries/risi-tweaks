@@ -80,7 +80,19 @@ class VariantDropdown(RtBaseWidgets.DropdownGSetting):
             self.case = []
             self.menu = []
             self.gen_menu()
+        if self.setting.get_string("theme-name") == "risi":
+            background = Gio.Settings("org.gnome.desktop.background")
+            if background.get_string("picture-uri").startswith("file:///usr/share/backgrounds/risios-37/37-"):
+                color = settings.get_string("variant-name")
+                if color == "main":
+                    color = "blood-orange"
 
+                background.set_string(
+                    "picture-uri", f"file:///usr/share/backgrounds/risios-37/37-light-{color}.png"
+                )
+                background.set_string(
+                    "picture-uri-dark", f"file:///usr/share/backgrounds/risios-37/37-dark-{color}.png"
+                )
 
 colors = ["main", "blue", "green", "orange", "yellow", "red", "purple", "brown"]
 
