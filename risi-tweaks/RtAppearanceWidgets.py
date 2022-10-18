@@ -116,8 +116,7 @@ class AccentColors(RtBaseWidgets.Option):
         self.set_valign(Gtk.Align.START)
         self.label.set_hexpand(False)
         self.label.set_halign(Gtk.Align.START)
-        self.set_margin_top(10)
-        self.set_margin_end(5)
+        self.set_margin_end(10)
 
 
 class AccentFlowBox(Gtk.FlowBox):
@@ -127,8 +126,7 @@ class AccentFlowBox(Gtk.FlowBox):
         self.set_valign(Gtk.Align.START)
         self.set_hexpand(True)
         self.set_halign(Gtk.Align.END)
-        self.set_min_children_per_line(8)
-        # self.set_size_request(-1, -1)
+        self.set_homogeneous(True)
 
         for color in colors:
             self.add(AccentButton(color))
@@ -140,6 +138,7 @@ class AccentFlowBox(Gtk.FlowBox):
                 )
             except TypeError:
                 self.select_child(self.get_child_at_index(0))
+        self.set_max_children_per_line(len(colors))
 
         self.connect("selected-children-changed", self.child_activated)
         settings.connect("changed::variant-name", self.on_setting_changed)
