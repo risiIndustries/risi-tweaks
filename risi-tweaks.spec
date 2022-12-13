@@ -1,6 +1,6 @@
 Name:           risi-tweaks
-Version:        37
-Release:        20%{?dist}
+Version:        37.1
+Release:        21%{?dist}
 Summary:        risiOS's Tweak Tool
 
 License:        GPL v3

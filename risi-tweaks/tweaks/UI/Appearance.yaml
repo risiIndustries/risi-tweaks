@@ -18,6 +18,12 @@
       description: |
         This is a custom theming engine created by risiIndustries that automatically applies
         Libadwaita colors to applications to make theming as easy as the old days.
+        
+        You can download themes and find information about working with rtheme at
+        https://themes.risi.io
+        
+        This is very hacky and may break things, so if you notice any theming related issues,
+        PLEASE REPORT THEM TO US, and not the original application developers.
     - setting:
       name: "rTheme Variants"
       type: VariantStack

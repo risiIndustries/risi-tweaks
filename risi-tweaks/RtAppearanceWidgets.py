@@ -94,6 +94,7 @@ class VariantDropdown(RtBaseWidgets.DropdownGSetting):
                     "picture-uri-dark", f"file:///usr/share/backgrounds/risios-37/37-dark-{color}.png"
                 )
 
+
 colors = ["main", "blue", "green", "orange", "yellow", "red", "purple", "brown"]
 
 color_previews = {

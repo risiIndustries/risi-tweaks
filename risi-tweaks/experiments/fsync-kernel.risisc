@@ -1,0 +1,69 @@
+#!/bin/risiscript
+metadata:
+  name: "Fsync Kernel (Used in Nobara)"
+  id: "io.risi.custom_kernels"
+  description: "Replace the stock kernel with a custom one.\nWARNING: MAY BREAK YOUR SYSTEM. ONLY DO THIS IF YOU KNOW WHAT YOU ARE DOING."
+  dependencies:
+    - risi-welcome
+  root: True
+  one_time_use: True
+  risiscript_version: 1.0
+  reboot: True
+
+install:
+  init:
+    kernel_description:
+      - DESCRIPTION
+      - | 
+        Make sure you know what you are doing before installing a custom kernel. If you don't, your system may break.
+        MAKE SURE SECURE BOOT IS DISABLED BEFORE RUNNING THIS SCRIPT.
+        
+        kernel-fsync: Fedora kernel with these patches:
+        - cherry-picked Zen patches (patch, based on glitched-base by tkg)
+        - fsync futex2 compatibility patch (patch)
+        - OpenRGB (patch)
+        - amdgpu radeon patch (patch)
+        - PCIe ACS Override patch
+        - acpi proc idle skip patch (patch)
+        - s2idle GUID quirk patch (including hijack patch from asus-linux) (patch)
+        - steam deck support (patch)
+        - surface support (upstream)
+        - Asus patches (upstream)
+        This kernel is the one used in Nobara.
+    warning:
+      - WARNING
+      - "SECURE BOOT WARNING"
+      - "MAKE SURE SECURE BOOT IS DISABLED BEFORE RUNNING THIS SCRIPT."
+  bash: |
+    echo "Adding copr repo..."
+    dnf copr enable -y sentry/kernel-fsync
+    echo "Exclude stock kernel from updates..."
+    python3 /usr/share/risiWelcome/scripts/addexcludes.py /etc/yum.repos.d/fedora-updates.repo updates kernel
+    dnf update --refresh -y
+    echo "Reinstalling kernel from sentry instead of Fedora..."
+    dnf reinstall kernel -y
+  checks:
+    - COMMANDOUTPUTCONTAINS:
+      - "dnf info kernel"
+      - "copr:copr.fedorainfracloud.org:sentry:kernel-fsync"
+
+remove:
+  init:
+    warning:
+      - WARNING
+      - "WARNING"
+      - "Fedora keeps the last 3 kernels installed, so this kernel may not be fully removed until a new kernel update is installed."
+  bash: |
+    echo "Removing stock kernel exclusion from updates..."
+    python3 /usr/share/risiWelcome/scripts/removeexcludes.py /etc/yum.repos.d/fedora-updates.repo updates kernel
+    echo "Removing kernel-fsync repo"
+    dnf copr remove -y sentry/kernel-fsync
+    dnf update --refresh -y
+    echo "Reinstalling kernel from Fedora instead of sentry..."
+    dnf reinstall kernel -y
+    rpm -q kernel-headers && dnf reinstall kernel-headers -y
+    rpm -q kernel-devel && dnf reinstall kernel-devel -y
+  checks:
+    - COMMANDOUTPUTCONTAINS:
+        - "rpm -q kernel && echo installed"
+        - "installed"
