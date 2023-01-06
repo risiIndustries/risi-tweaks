@@ -7,8 +7,6 @@ import gi
 import rthemelib
 
 import RtBaseWidgets
-import RtColorWindow
-import adwcolor.functions
 
 gi.require_version("Gtk", "3.0")
 gi.require_version("Gdk", "3.0")

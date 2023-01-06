@@ -27,6 +27,12 @@
     - setting:
       name: "rTheme Variants"
       type: VariantStack
+    - setting:
+      name: "Theme Styling"
+      type: DropdownGSetting
+      gsetting: [org.gnome.desktop.interface, color-scheme]
+      dropdown_options: ["Default", "Dark"]
+      dropdown_keys: ["default", "prefer-dark"]
 - section:
     name: "Other Theming"
     settings:
